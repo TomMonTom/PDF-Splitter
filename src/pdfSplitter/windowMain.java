@@ -9,10 +9,6 @@ import java.io.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.awt.Color;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
@@ -29,6 +25,7 @@ import javax.swing.text.DefaultEditorKit;
 public class windowMain extends javax.swing.JFrame {
 public boolean copyCheck;
 public boolean supplierDoc;
+String example = "eg: C:\\MyDirectory";
     /**
      * Creates new form windowMain
      */
@@ -45,10 +42,10 @@ public JMenuBar createMenuBar () {
         cut.setMnemonic(KeyEvent.VK_T);
         edit.add(cut);
 
-        copy = new JMenuItem(new DefaultEditorKit.CopyAction());
-        copy.setText("Copy");
-        copy.setMnemonic(KeyEvent.VK_C);
-        copy.add(copy);
+        copyItem = new JMenuItem(new DefaultEditorKit.CopyAction());
+        copyItem.setText("Copy");
+        copyItem.setMnemonic(KeyEvent.VK_C);
+        copyItem.add(copyItem);
 
         paste = new JMenuItem(new DefaultEditorKit.PasteAction());
         paste.setText("Paste");
@@ -89,7 +86,7 @@ public JMenuBar createMenuBar () {
         copiesCheck = new javax.swing.JCheckBox();
         menuBar = new javax.swing.JMenuBar();
         edit = new javax.swing.JMenu();
-        copy = new javax.swing.JMenuItem();
+        copyItem = new javax.swing.JMenuItem();
         paste = new javax.swing.JMenuItem();
         cut = new javax.swing.JMenuItem();
 
@@ -242,8 +239,8 @@ public JMenuBar createMenuBar () {
 
         edit.setText("Edit");
 
-        copy.setText("Copy");
-        edit.add(copy);
+        copyItem.setText("Copy");
+        edit.add(copyItem);
 
         paste.setText("Paste");
         paste.setToolTipText("");
@@ -450,7 +447,7 @@ public JMenuBar createMenuBar () {
 
     private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryFieldMouseClicked
         // TODO add your handling code here:
-        String example = "eg: C:\\MyDirectory";
+        
         if (directoryField.getText().equals(example)){
         directoryField.setText("");
         directoryField.setForeground(Color.BLACK);
@@ -459,14 +456,6 @@ public JMenuBar createMenuBar () {
 
     private void copiesCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copiesCheckActionPerformed
         // TODO add your handling code here:
-               if (copiesCheck.isSelected()){
-                   copyCheck = true;
-                   System.out.println(copyCheck);
-               }else{
-                   copyCheck = false;
-                   System.out.println(copyCheck);
-               }
-               
     }//GEN-LAST:event_copiesCheckActionPerformed
 
 
@@ -511,7 +500,7 @@ public JMenuBar createMenuBar () {
     private javax.swing.JButton buttonBrowse;
     private javax.swing.JButton combine;
     private javax.swing.JCheckBox copiesCheck;
-    private javax.swing.JMenuItem copy;
+    private javax.swing.JMenuItem copyItem;
     private javax.swing.JMenuItem cut;
     public javax.swing.JTextField directoryField;
     public javax.swing.JLabel directoryLabel;
@@ -543,9 +532,8 @@ public JMenuBar createMenuBar () {
             if (!file.isFile()) {
                 continue;
             }
-            if (directoryField.getText() !=null){
-                path = directoryField.getText();
-            }
+            System.out.println(directoryField.getText());
+            System.out.println(example);
             // Split the source filename into its 2 parts
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -557,7 +545,6 @@ public JMenuBar createMenuBar () {
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
             document.open();
-            if (copyCheck == false){
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
                 document = new Document();
@@ -566,44 +553,14 @@ public JMenuBar createMenuBar () {
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 document.close();
                 }
-            }
-            else if (copyCheck == true && supplierDoc==true){
-            String[] fileNames = fileNameWithoutExt.split("\\s");
-            /*if (fileNames.length != 2) {
-                throw new RuntimeException("File name format is not in right format");
-            }*/
-
-            String fileNameFirst = fileNames[0];
-            String fileNameSecond = fileNames[1];
-            System.out.println("First lot number: " + fileNameFirst + " Second lot number: " + fileNameSecond);
-            String[] fileNameFirstParts = fileNameFirst.split("-");
-            String[] fileNameSecondParts = fileNameSecond.split("-");
-
-            // Project num is always the 1st part
-            String projectNum = fileNameFirstParts[0];
-            if (!projectNum.equals(fileNameSecondParts[0])) {
-                throw new RuntimeException("Filename needs to be renamed to the correct format");
-            }
-
-            // Strip off the first and second lot number, parse into integers
-            int firstLotNum;
-            int secondLotNum;
-            firstLotNum = Integer.parseInt(fileNameFirstParts[1]);
-            secondLotNum = Integer.parseInt(fileNameSecondParts[1]);
-            int k=1;
-            for (int j = 1; j < numPages + 1; j++) {
-                document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + projectNum + "-" + (firstLotNum + 1)+".pdf"));
-                document.open();
-                copy.addPage(copy.getImportedPage(pdfFileReader, k)); /* Import pages from original document */
-                document.close();
-                }
-            }
             System.out.println("Number of Documents Created:" + numPages);
             pdfFileReader.close();
             }
+            
+            }
+    
         
-    }
+    
     public void pdfSplit() throws IOException, DocumentException {
         String DEFAULT_PATH = directoryField.getText();
         // TODO Instead of hard code path, pass in as argument
@@ -612,7 +569,6 @@ public JMenuBar createMenuBar () {
         File folder = new File(path);
         FileNameFilter FileFilter = new FileNameFilter();
         File[] listOfFiles = folder.listFiles(FileFilter); /* Stores the listing of the files */
-        int k=1;
         for (int i = 0; i < listOfFiles.length; i++) {
             File file = listOfFiles[i];
             if (!file.isFile()) {
@@ -624,8 +580,7 @@ public JMenuBar createMenuBar () {
             PdfReader pdfFileReader = new PdfReader(file.getPath());
             Document document = new Document(); /*instantiates a new document to be made*/
             int numPages = pdfFileReader.getNumberOfPages();
-            System.out.println(supplierDoc);
-            if (supplierDoc = false){
+            if (supplierDoc == true){
             // Split on a space '\s'
             String[] fileNames = fileNameWithoutExt.split("\\s");
             /*if (fileNames.length != 2) {
@@ -647,49 +602,26 @@ public JMenuBar createMenuBar () {
             // Strip off the first and second lot number, parse into integers
             int firstLotNum;
             int secondLotNum;
-            
             firstLotNum = Integer.parseInt(fileNameFirstParts[1]);
             secondLotNum = Integer.parseInt(fileNameSecondParts[1]);
             // Create a copy of the orignal source file. We will pick specific pages out below
             document.open();
-            if (copyCheck==true){
-            for (int j = 1; j < numPages + 1; j++) {
-                firstLotNum++;
-                String FileName = projectNum + "-" + (firstLotNum + 1) + ".pdf"; /* Dynamic file name */
-                document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName));
-                document.open();
-                copy.addPage(copy.getImportedPage(pdfFileReader, k)); /* Import pages from original document */
-                }
-                document.close();
-            }else if (copyCheck==false){
                 for (int j = 1; j < numPages + 1; j++) {
+                String FileName = projectNum + "-" + (firstLotNum) + ".pdf"; /* Dynamic file name */
                 firstLotNum++;
-                String FileName = projectNum + "-" + (firstLotNum + 1) + ".pdf"; /* Dynamic file name */
                 document = new Document();
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-                }
                 document.close();
-            }
-            
-            } else if (supplierDoc = false){
+                }
+                
+            } else if (supplierDoc == false){
             // Determine number of pages by difference of lot numbers
             // Read in the source document
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
             document.open();
-            if (copyCheck==true){
-                for (int j = 1; j < numPages + 1; j++) {
-                String FileName = (fileNameWithoutExt); /* Dynamic file name */
-                document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" +FileName+"("+j+")"+".pdf"));
-                document.open();
-                copy.addPage(copy.getImportedPage(pdfFileReader, k)); /* Import pages from original document */
-                document.close();
-                }
-            }else if (copyCheck==false){
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
                 document = new Document();
@@ -698,13 +630,12 @@ public JMenuBar createMenuBar () {
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 document.close();
                 }
-            }
-            
+
+            System.out.println("Number of Documents Created:" + numPages);
             }else{
                 break;
             }
                pdfFileReader.close();
-               System.out.println("Number of Documents Created:" + numPages);
         }
     }
 

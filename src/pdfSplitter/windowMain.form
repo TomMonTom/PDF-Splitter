@@ -9,7 +9,7 @@
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="copy">
+            <MenuItem class="javax.swing.JMenuItem" name="copyItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Copy"/>
               </Properties>
