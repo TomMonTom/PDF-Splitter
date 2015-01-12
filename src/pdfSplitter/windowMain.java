@@ -316,9 +316,9 @@ public JMenuBar createMenuBar () {
 
     private void buttonBrowseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonBrowseMouseClicked
         JFileChooser fc = new JFileChooser();
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File path = fc.getCurrentDirectory();
+            File path = fc.getSelectedFile();
             directoryField.setText(path.getPath());
         }
     }//GEN-LAST:event_buttonBrowseMouseClicked
