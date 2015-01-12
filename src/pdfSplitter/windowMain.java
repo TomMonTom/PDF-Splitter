@@ -36,6 +36,7 @@ public boolean supplierDoc;
         /* Stores the listing of the files */
     }
 public JMenuBar createMenuBar () {
+    //Creates a menu to copy and paste directory information
         edit.setMnemonic(KeyEvent.VK_E);
 
         cut = new JMenuItem(new DefaultEditorKit.CutAction());
@@ -311,10 +312,11 @@ public JMenuBar createMenuBar () {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        System.exit(0);        // TODO add your handling code here:
+        System.exit(0);        // button to perform an exit command to close the application.
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void buttonBrowseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonBrowseMouseClicked
+        //Creates a file chooser to properly navigate and select a directory that then sets the text in the directory field for later use.
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -328,33 +330,35 @@ public JMenuBar createMenuBar () {
     }//GEN-LAST:event_buttonBrowseActionPerformed
 
     private void dragAndDropComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_dragAndDropComponentAdded
+        //Code used for the drag and drop portion of the combine function
         new FileDrop(dragAndDrop, new FileDrop.Listener() {
-
+            //initializes a drag and drop interface to then use an object
             public void filesDropped(File[] files) {
                 try {
-                    // handle file drop
+                    // uses the pdfMerge method that passes down a file string.
                     pdfMerge(files);
                 } catch (DocumentException ex) {
                     Logger.getLogger(windowMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }   // end filesDropped
+            }
 
             public void pdfMerge(File[] files) throws DocumentException {
-                
-                File newFiles = files[0];
+                File newFiles = files[0];   //Takes the name of the first file within the list in the explorer and uses that file name as a base name
                 String DEFAULT_PATH = newFiles.getParent();
+                //if the directoryfield contains text, then use that field as the save path for combining pdfs.
                 if (directoryField.getText() !=null){
                 DEFAULT_PATH = directoryField.getText();
                 }
                 System.out.println(DEFAULT_PATH);
                 List<java.io.InputStream> list = new ArrayList<>();
                 File[] listOfFiles = files; /* Stores the listing of the files */
-                Arrays.sort(listOfFiles);
+                Arrays.sort(listOfFiles); // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
                 for (int i =0; i<listOfFiles.length; i++){
                 System.out.println(listOfFiles[i]);
                 }
                 int i;
                 try {
+                    //add the file info to a list with the path and filename in place. then output the information to the doMerge method.
                     for ( i = 0; i < listOfFiles.length; i++) {
                         list.add(new FileInputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[i].getName())));
                     }
@@ -380,7 +384,10 @@ public JMenuBar createMenuBar () {
 
     private void evenPagesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_evenPagesMouseClicked
         try {
-            // TODO add your handling code here:
+            /* Execute method pdfEven when the button is clicked. 
+            The method takes pages that are even set and makes one 
+            pdf documents consisting of two pages found 
+            within the main pdf document.*/
             pdfEven();
         } catch (IOException ex) {
             Logger.getLogger(windowMain.class.getName()).log(Level.SEVERE, null, ex);
@@ -391,6 +398,8 @@ public JMenuBar createMenuBar () {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         try {
+            /* Execture method pdfSplit. The method splits 
+            apart the pdf documents and renames the file to FILENAME(#).pdf*/
             pdfSplit();
         } catch (IOException ex) {
             Logger.getLogger(windowMain.class.getName()).log(Level.SEVERE, null, ex);
@@ -400,7 +409,7 @@ public JMenuBar createMenuBar () {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void supplierCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierCheckActionPerformed
-        // TODO add your handling code here:
+        // Radio button to utilize a rename function for specific organization needs.
                if (supplierCheck.isSelected()){
                    supplierDoc = true;
                    System.out.println(supplierDoc);
@@ -417,7 +426,7 @@ public JMenuBar createMenuBar () {
     }//GEN-LAST:event_supplierCheckPropertyChange
 
     private void dragAndDropSplitComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_dragAndDropSplitComponentAdded
-        // TODO add your handling code here:
+        // Drag and drop zone to split pdf documents that are dragged and dropped into the JPanel.
          new FileDrop(dragAndDropSplit, new FileDrop.Listener() {
             public void filesDropped(File[] files) {
                 try {
