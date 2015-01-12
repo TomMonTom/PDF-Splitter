@@ -27,7 +27,7 @@ import javax.swing.text.DefaultEditorKit;
  * @author tthompson
  */
 public class windowMain extends javax.swing.JFrame {
-
+public boolean copyCheck;
 public boolean supplierDoc;
     /**
      * Creates new form windowMain
@@ -86,6 +86,7 @@ public JMenuBar createMenuBar () {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         progressListing = new javax.swing.JTextArea();
+        copiesCheck = new javax.swing.JCheckBox();
         menuBar = new javax.swing.JMenuBar();
         edit = new javax.swing.JMenu();
         copy = new javax.swing.JMenuItem();
@@ -232,6 +233,13 @@ public JMenuBar createMenuBar () {
         progressListing.setRows(5);
         jScrollPane1.setViewportView(progressListing);
 
+        copiesCheck.setText("Create Copies");
+        copiesCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copiesCheckActionPerformed(evt);
+            }
+        });
+
         edit.setText("Edit");
 
         copy.setText("Copy");
@@ -263,23 +271,27 @@ public JMenuBar createMenuBar () {
                         .addComponent(buttonBrowse))
                     .addComponent(jScrollPane1)
                     .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(combine)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(evenPages)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(supplierCheck)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exitButton)
+                        .addComponent(evenPages)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(supplierCheck)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exitButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(okButton))
-                    .addComponent(jSeparator1)
-                    .addComponent(titleLabel)
-                    .addComponent(instructions)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(copiesCheck)
+                            .addComponent(titleLabel)
+                            .addComponent(instructions)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -303,8 +315,10 @@ public JMenuBar createMenuBar () {
                     .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dragAndDrop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(copiesCheck)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
                     .addComponent(exitButton)
@@ -443,6 +457,18 @@ public JMenuBar createMenuBar () {
         }
     }//GEN-LAST:event_directoryFieldMouseClicked
 
+    private void copiesCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copiesCheckActionPerformed
+        // TODO add your handling code here:
+               if (copiesCheck.isSelected()){
+                   copyCheck = true;
+                   System.out.println(copyCheck);
+               }else{
+                   copyCheck = false;
+                   System.out.println(copyCheck);
+               }
+               
+    }//GEN-LAST:event_copiesCheckActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -484,6 +510,7 @@ public JMenuBar createMenuBar () {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBrowse;
     private javax.swing.JButton combine;
+    private javax.swing.JCheckBox copiesCheck;
     private javax.swing.JMenuItem copy;
     private javax.swing.JMenuItem cut;
     public javax.swing.JTextField directoryField;
@@ -530,6 +557,7 @@ public JMenuBar createMenuBar () {
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
             document.open();
+            if (copyCheck == false){
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
                 document = new Document();
@@ -538,7 +566,39 @@ public JMenuBar createMenuBar () {
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 document.close();
                 }
-            
+            }
+            else if (copyCheck == true && supplierDoc==true){
+            String[] fileNames = fileNameWithoutExt.split("\\s");
+            /*if (fileNames.length != 2) {
+                throw new RuntimeException("File name format is not in right format");
+            }*/
+
+            String fileNameFirst = fileNames[0];
+            String fileNameSecond = fileNames[1];
+            System.out.println("First lot number: " + fileNameFirst + " Second lot number: " + fileNameSecond);
+            String[] fileNameFirstParts = fileNameFirst.split("-");
+            String[] fileNameSecondParts = fileNameSecond.split("-");
+
+            // Project num is always the 1st part
+            String projectNum = fileNameFirstParts[0];
+            if (!projectNum.equals(fileNameSecondParts[0])) {
+                throw new RuntimeException("Filename needs to be renamed to the correct format");
+            }
+
+            // Strip off the first and second lot number, parse into integers
+            int firstLotNum;
+            int secondLotNum;
+            firstLotNum = Integer.parseInt(fileNameFirstParts[1]);
+            secondLotNum = Integer.parseInt(fileNameSecondParts[1]);
+            int k=1;
+            for (int j = 1; j < numPages + 1; j++) {
+                document = new Document();
+                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + projectNum + "-" + (firstLotNum + 1)+".pdf"));
+                document.open();
+                copy.addPage(copy.getImportedPage(pdfFileReader, k)); /* Import pages from original document */
+                document.close();
+                }
+            }
             System.out.println("Number of Documents Created:" + numPages);
             pdfFileReader.close();
             }
@@ -552,13 +612,12 @@ public JMenuBar createMenuBar () {
         File folder = new File(path);
         FileNameFilter FileFilter = new FileNameFilter();
         File[] listOfFiles = folder.listFiles(FileFilter); /* Stores the listing of the files */
-
+        int k=1;
         for (int i = 0; i < listOfFiles.length; i++) {
             File file = listOfFiles[i];
             if (!file.isFile()) {
                 continue;
             }
-
             // Split the source filename into its 2 parts
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -588,11 +647,23 @@ public JMenuBar createMenuBar () {
             // Strip off the first and second lot number, parse into integers
             int firstLotNum;
             int secondLotNum;
+            
             firstLotNum = Integer.parseInt(fileNameFirstParts[1]);
             secondLotNum = Integer.parseInt(fileNameSecondParts[1]);
             // Create a copy of the orignal source file. We will pick specific pages out below
             document.open();
+            if (copyCheck==true){
             for (int j = 1; j < numPages + 1; j++) {
+                firstLotNum++;
+                String FileName = projectNum + "-" + (firstLotNum + 1) + ".pdf"; /* Dynamic file name */
+                document = new Document();
+                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName));
+                document.open();
+                copy.addPage(copy.getImportedPage(pdfFileReader, k)); /* Import pages from original document */
+                }
+                document.close();
+            }else if (copyCheck==false){
+                for (int j = 1; j < numPages + 1; j++) {
                 firstLotNum++;
                 String FileName = projectNum + "-" + (firstLotNum + 1) + ".pdf"; /* Dynamic file name */
                 document = new Document();
@@ -601,12 +672,24 @@ public JMenuBar createMenuBar () {
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 }
                 document.close();
+            }
+            
             } else if (supplierDoc = false){
             // Determine number of pages by difference of lot numbers
             // Read in the source document
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
             document.open();
+            if (copyCheck==true){
+                for (int j = 1; j < numPages + 1; j++) {
+                String FileName = (fileNameWithoutExt); /* Dynamic file name */
+                document = new Document();
+                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" +FileName+"("+j+")"+".pdf"));
+                document.open();
+                copy.addPage(copy.getImportedPage(pdfFileReader, k)); /* Import pages from original document */
+                document.close();
+                }
+            }else if (copyCheck==false){
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
                 document = new Document();
@@ -615,12 +698,13 @@ public JMenuBar createMenuBar () {
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 document.close();
                 }
-
-            System.out.println("Number of Documents Created:" + numPages);
+            }
+            
             }else{
                 break;
             }
                pdfFileReader.close();
+               System.out.println("Number of Documents Created:" + numPages);
         }
     }
 
