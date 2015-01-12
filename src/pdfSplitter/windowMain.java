@@ -430,7 +430,6 @@ public JMenuBar createMenuBar () {
                 Logger.getLogger(windowMain.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-       Change
     }//GEN-LAST:event_combineActionPerformed
 
     private void directoryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_directoryFieldActionPerformed
