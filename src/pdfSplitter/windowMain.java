@@ -84,7 +84,7 @@ public JMenuBar createMenuBar () {
         dragAndDropSplit = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        progressListing = new javax.swing.JTextArea();
         menuBar = new javax.swing.JMenuBar();
         edit = new javax.swing.JMenu();
         copy = new javax.swing.JMenuItem();
@@ -120,21 +120,11 @@ public JMenuBar createMenuBar () {
                 directoryFieldComponentAdded(evt);
             }
         });
-        directoryField.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                directoryFieldMouseDragged(evt);
-            }
-        });
 
         buttonBrowse.setText("Browse...");
         buttonBrowse.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonBrowseMouseClicked(evt);
-            }
-        });
-        buttonBrowse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonBrowseActionPerformed(evt);
             }
         });
 
@@ -179,11 +169,6 @@ public JMenuBar createMenuBar () {
                 evenPagesMouseClicked(evt);
             }
         });
-        evenPages.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                evenPagesActionPerformed(evt);
-            }
-        });
 
         supplierCheck.setText("Supplier Receiving Document");
         supplierCheck.addActionListener(new java.awt.event.ActionListener() {
@@ -224,9 +209,9 @@ public JMenuBar createMenuBar () {
                 .addContainerGap(57, Short.MAX_VALUE))
         );
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        progressListing.setColumns(20);
+        progressListing.setRows(5);
+        jScrollPane1.setViewportView(progressListing);
 
         edit.setText("Edit");
 
@@ -252,38 +237,34 @@ public JMenuBar createMenuBar () {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(titleLabel)
-                            .addComponent(instructions)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(directoryLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(directoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(buttonBrowse)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(directoryLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(directoryField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonBrowse))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(combine)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(evenPages)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(supplierCheck)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(exitButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(okButton)))
-                        .addContainerGap())))
+                            .addComponent(titleLabel)
+                            .addComponent(instructions))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(combine)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(evenPages)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(supplierCheck)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exitButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(okButton))
+                    .addComponent(jSeparator1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,8 +286,8 @@ public JMenuBar createMenuBar () {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dragAndDrop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
@@ -334,10 +315,6 @@ public JMenuBar createMenuBar () {
         }
     }//GEN-LAST:event_buttonBrowseMouseClicked
 
-    private void buttonBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBrowseActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buttonBrowseActionPerformed
-
     private void dragAndDropComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_dragAndDropComponentAdded
         //Code used for the drag and drop portion of the combine function
         new FileDrop(dragAndDrop, new FileDrop.Listener() {
@@ -351,45 +328,9 @@ public JMenuBar createMenuBar () {
                 }
             }
 
-            public void pdfMerge(File[] files) throws DocumentException {
-                File newFiles = files[0];   //Takes the name of the first file within the list in the explorer and uses that file name as a base name
-                String DEFAULT_PATH = newFiles.getParent();
-                //if the directoryfield contains text, then use that field as the save path for combining pdfs.
-                if (directoryField.getText() !=null){
-                DEFAULT_PATH = directoryField.getText();
-                }
-                System.out.println(DEFAULT_PATH);
-                List<java.io.InputStream> list = new ArrayList<>();
-                File[] listOfFiles = files; /* Stores the listing of the files */
-                Arrays.sort(listOfFiles); // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
-                for (int i =0; i<listOfFiles.length; i++){
-                System.out.println(listOfFiles[i]);
-                }
-                int i;
-                try {
-                    //add the file info to a list with the path and filename in place. then output the information to the doMerge method.
-                    for ( i = 0; i < listOfFiles.length; i++) {
-                        list.add(new FileInputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[i].getName())));
-                    }
-                    OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[0].getName()+".pdf"));
-                    doMerge(list, out);
-                    
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            
         });
     }//GEN-LAST:event_dragAndDropComponentAdded
-
-    private void combineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combineActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_combineActionPerformed
-
-    private void evenPagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evenPagesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_evenPagesActionPerformed
 
     private void evenPagesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_evenPagesMouseClicked
         try {
@@ -429,11 +370,6 @@ public JMenuBar createMenuBar () {
                
     }//GEN-LAST:event_supplierCheckActionPerformed
 
-    private void supplierCheckPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_supplierCheckPropertyChange
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_supplierCheckPropertyChange
-
     private void dragAndDropSplitComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_dragAndDropSplitComponentAdded
         // Drag and drop zone to split pdf documents that are dragged and dropped into the JPanel.
          new FileDrop(dragAndDropSplit, new FileDrop.Listener() {
@@ -449,10 +385,6 @@ public JMenuBar createMenuBar () {
             }
          });
     }//GEN-LAST:event_dragAndDropSplitComponentAdded
-
-    private void directoryFieldMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryFieldMouseDragged
-      // TODO add your handling code here:
-    }//GEN-LAST:event_directoryFieldMouseDragged
 
     private void directoryFieldComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_directoryFieldComponentAdded
         directoryField.setDropTarget(new DropTarget() {
@@ -470,7 +402,34 @@ public JMenuBar createMenuBar () {
             }
         }); 
     }//GEN-LAST:event_directoryFieldComponentAdded
-    
+
+    private void combineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combineActionPerformed
+        // TODO add your handling code here:
+        File folder = new File(directoryField.getName());
+        File [] files = folder.listFiles();
+        for (int i =0;i<files.length;i++){
+            try {
+                pdfMerge(files);
+            } catch (DocumentException ex) {
+                Logger.getLogger(windowMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
+    }//GEN-LAST:event_combineActionPerformed
+
+    private void supplierCheckPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_supplierCheckPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_supplierCheckPropertyChange
+    public void textSetter(String args){
+        String textCount = directoryField.getText();
+        System.out.println(textCount);
+        int textCountConver = Integer.parseInt(textCount);
+         if (textCountConver==38){
+             directoryField.add("...", copy);
+         }
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -480,6 +439,7 @@ public JMenuBar createMenuBar () {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -524,11 +484,11 @@ public JMenuBar createMenuBar () {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuBar menuBar;
     public javax.swing.JButton okButton;
     private javax.swing.JMenuItem paste;
     public javax.swing.JProgressBar progressBar;
+    private javax.swing.JTextArea progressListing;
     private javax.swing.JCheckBox supplierCheck;
     public javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
@@ -536,7 +496,6 @@ public JMenuBar createMenuBar () {
     public void pdfSplitDrop(File[] files) throws IOException, DocumentException {
         // TODO Instead of hard code path, pass in as argument
         String path = files[0].getParent();
-        File folder = new File(path);
         File [] listOfFiles = files; /* Stores the listing of the files */
         for (int i = 0; i < listOfFiles.length; i++) {
             File file = listOfFiles[i];
@@ -751,4 +710,33 @@ public JMenuBar createMenuBar () {
         document.close();
         outputStream.close();
     }
+    public void pdfMerge(File[] files) throws DocumentException {
+                File newFiles = files[0];   //Takes the name of the first file within the list in the explorer and uses that file name as a base name
+                String DEFAULT_PATH = newFiles.getParent();
+                //if the directoryfield contains text, then use that field as the save path for combining pdfs.
+                if (directoryField.getText() !=null){
+                DEFAULT_PATH = directoryField.getText();
+                }
+                System.out.println(DEFAULT_PATH);
+                List<java.io.InputStream> list = new ArrayList<>();
+                File[] listOfFiles = files; /* Stores the listing of the files */
+                Arrays.sort(listOfFiles); // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
+                for (int i =0; i<listOfFiles.length; i++){
+                System.out.println(listOfFiles[i]);
+                }
+                int i;
+                try {
+                    //add the file info to a list with the path and filename in place. then output the information to the doMerge method.
+                    for ( i = 0; i < listOfFiles.length; i++) {
+                        list.add(new FileInputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[i].getName())));
+                    }
+                    OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[0].getName()+".pdf"));
+                    doMerge(list, out);
+                    
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 }
