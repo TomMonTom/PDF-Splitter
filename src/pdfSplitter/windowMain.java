@@ -202,6 +202,7 @@ public JMenuBar createMenuBar () {
 
         dragAndDropSplit.setBackground(new java.awt.Color(255, 204, 0));
         dragAndDropSplit.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        dragAndDropSplit.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         dragAndDropSplit.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 dragAndDropSplitComponentAdded(evt);
@@ -217,7 +218,7 @@ public JMenuBar createMenuBar () {
             .addGroup(dragAndDropSplitLayout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addComponent(jLabel1)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         dragAndDropSplitLayout.setVerticalGroup(
             dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,17 +261,8 @@ public JMenuBar createMenuBar () {
                         .addComponent(directoryField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonBrowse))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(titleLabel)
-                            .addComponent(instructions))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)
                     .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(combine)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -281,7 +273,13 @@ public JMenuBar createMenuBar () {
                         .addComponent(exitButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(okButton))
-                    .addComponent(jSeparator1))
+                    .addComponent(jSeparator1)
+                    .addComponent(titleLabel)
+                    .addComponent(instructions)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -305,7 +303,7 @@ public JMenuBar createMenuBar () {
                     .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dragAndDrop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
@@ -325,6 +323,7 @@ public JMenuBar createMenuBar () {
 
     private void buttonBrowseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonBrowseMouseClicked
         //Creates a file chooser to properly navigate and select a directory that then sets the text in the directory field for later use.
+        directoryField.setForeground(Color.BLACK);
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -437,7 +436,7 @@ public JMenuBar createMenuBar () {
 
     private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryFieldMouseClicked
         // TODO add your handling code here:
-        String example = "C:\\MyDirectory";
+        String example = "eg: C:\\MyDirectory";
         if (directoryField.getText().equals(example)){
         directoryField.setText("");
         directoryField.setForeground(Color.BLACK);
