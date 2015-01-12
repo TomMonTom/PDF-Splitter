@@ -343,6 +343,9 @@ public JMenuBar createMenuBar () {
                 
                 File newFiles = files[0];
                 String DEFAULT_PATH = newFiles.getParent();
+                if (directoryField.getText() !=null){
+                DEFAULT_PATH = directoryField.getText();
+                }
                 System.out.println(DEFAULT_PATH);
                 List<java.io.InputStream> list = new ArrayList<>();
                 File[] listOfFiles = files; /* Stores the listing of the files */
@@ -520,6 +523,9 @@ public JMenuBar createMenuBar () {
             if (!file.isFile()) {
                 continue;
             }
+            if (directoryField.getText() !=null){
+                path = directoryField.getText();
+            }
             // Split the source filename into its 2 parts
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -539,7 +545,7 @@ public JMenuBar createMenuBar () {
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 document.close();
                 }
-
+            
             System.out.println("Number of Documents Created:" + numPages);
             pdfFileReader.close();
             }
