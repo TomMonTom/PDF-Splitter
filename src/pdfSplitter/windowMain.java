@@ -8,6 +8,7 @@ package pdfSplitter;
 import java.io.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import java.awt.Color;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -115,9 +116,31 @@ public JMenuBar createMenuBar () {
             }
         });
 
+        directoryField.setForeground(new java.awt.Color(204, 204, 204));
+        directoryField.setText("eg: C:\\MyDirectory");
         directoryField.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 directoryFieldComponentAdded(evt);
+            }
+        });
+        directoryField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                directoryFieldFocusGained(evt);
+            }
+        });
+        directoryField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                directoryFieldMouseClicked(evt);
+            }
+        });
+        directoryField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                directoryFieldActionPerformed(evt);
+            }
+        });
+        directoryField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                directoryFieldPropertyChange(evt);
             }
         });
 
@@ -174,11 +197,6 @@ public JMenuBar createMenuBar () {
         supplierCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 supplierCheckActionPerformed(evt);
-            }
-        });
-        supplierCheck.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                supplierCheckPropertyChange(evt);
             }
         });
 
@@ -387,26 +405,14 @@ public JMenuBar createMenuBar () {
     }//GEN-LAST:event_dragAndDropSplitComponentAdded
 
     private void directoryFieldComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_directoryFieldComponentAdded
-        directoryField.setDropTarget(new DropTarget() {
-            public synchronized void drop(DropTargetDropEvent evt){
-                try {
-                    evt.acceptDrop(DnDConstants.ACTION_COPY);
-                    List<File> droppedFile = (List<File>) evt
-                    .getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    for (File file: droppedFile){
-                        directoryField.setText(file.getPath());
-                    }
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
-            }
-        }); 
+
     }//GEN-LAST:event_directoryFieldComponentAdded
 
     private void combineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combineActionPerformed
         // TODO add your handling code here:
-        File folder = new File(directoryField.getName());
-        File [] files = folder.listFiles();
+        File folder = new File(directoryField.getText());
+        FileNameFilter FileFilter = new FileNameFilter();
+        File [] files = folder.listFiles(FileFilter);
         for (int i =0;i<files.length;i++){
             try {
                 pdfMerge(files);
@@ -417,18 +423,27 @@ public JMenuBar createMenuBar () {
        
     }//GEN-LAST:event_combineActionPerformed
 
-    private void supplierCheckPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_supplierCheckPropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_supplierCheckPropertyChange
-    public void textSetter(String args){
-        String textCount = directoryField.getText();
-        System.out.println(textCount);
-        int textCountConver = Integer.parseInt(textCount);
-         if (textCountConver==38){
-             directoryField.add("...", copy);
-         }
+    private void directoryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_directoryFieldActionPerformed
 
-    }
+    }//GEN-LAST:event_directoryFieldActionPerformed
+
+    private void directoryFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_directoryFieldFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_directoryFieldFocusGained
+
+    private void directoryFieldPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_directoryFieldPropertyChange
+        
+    }//GEN-LAST:event_directoryFieldPropertyChange
+
+    private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryFieldMouseClicked
+        // TODO add your handling code here:
+        String example = "C:\\MyDirectory";
+        if (directoryField.getText().equals(example)){
+        directoryField.setText("");
+        directoryField.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_directoryFieldMouseClicked
+
 
     /**
      * @param args the command line arguments
