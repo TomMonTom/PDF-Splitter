@@ -1,4 +1,4 @@
-package pdfSplitter;
+package com.tommontom.pdfsplitter;
 
 import java.io.*;
 public class FileNameFilter implements FileFilter

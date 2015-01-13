@@ -1,4 +1,4 @@
-package pdfSplitter;
+package com.tommontom.pdfsplitter;
 import java.awt.datatransfer.DataFlavor;
 import java.io.BufferedReader;
 import java.io.File;
