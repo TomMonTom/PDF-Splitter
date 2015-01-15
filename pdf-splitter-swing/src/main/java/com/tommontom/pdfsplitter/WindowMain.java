@@ -100,37 +100,21 @@ public class WindowMain extends javax.swing.JFrame {
     String example = "eg: C:\\MyDirectory";
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBrowse;
-
     private javax.swing.JButton combine;
-
     private javax.swing.JCheckBox copiesCheck;
-
     private javax.swing.JMenuItem copyItem;
-
     private javax.swing.JMenuItem cut;
-
     public javax.swing.JTextField directoryField;
-
     public javax.swing.JLabel directoryLabel;
-
     private javax.swing.JPanel dragAndDrop;
-
     private javax.swing.JPanel dragAndDropSplit;
-
     private javax.swing.JLabel dropLabel;
-
     private javax.swing.JMenu edit;
-
     private javax.swing.JButton evenPages;
-
     public javax.swing.JButton exitButton;
-
     public javax.swing.JLabel instructions;
-
     private javax.swing.JLabel jLabel1;
-
     private javax.swing.JScrollPane jScrollPane1;
-
     public javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenuBar menuBar;
     public javax.swing.JButton okButton;
@@ -139,7 +123,6 @@ public class WindowMain extends javax.swing.JFrame {
     private javax.swing.JTextArea progressListing;
     private javax.swing.JCheckBox supplierCheck;
     public javax.swing.JLabel titleLabel;
-
     // End of variables declaration//GEN-END:variables
     /**
      * Creates new form WindowMain
@@ -317,7 +300,6 @@ public class WindowMain extends javax.swing.JFrame {
 
         okButton.setText("Split");
         okButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
             }
@@ -330,40 +312,33 @@ public class WindowMain extends javax.swing.JFrame {
 
         exitButton.setText("Exit");
         exitButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitButtonActionPerformed(evt);
             }
         });
 
         directoryField.setForeground(new java.awt.Color(204, 204, 204));
-        directoryField.setText("eg: C:\\MyDirectory");
         directoryField.addContainerListener(new java.awt.event.ContainerAdapter() {
-            @Override
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 directoryFieldComponentAdded(evt);
             }
         });
         directoryField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 directoryFieldFocusGained(evt);
             }
         });
         directoryField.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 directoryFieldMouseClicked(evt);
             }
         });
         directoryField.addActionListener(new java.awt.event.ActionListener() {
-            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 directoryFieldActionPerformed(evt);
             }
         });
         directoryField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 directoryFieldPropertyChange(evt);
             }
@@ -371,7 +346,6 @@ public class WindowMain extends javax.swing.JFrame {
 
         buttonBrowse.setText("Browse...");
         buttonBrowse.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 buttonBrowseMouseClicked(evt);
             }
@@ -379,7 +353,6 @@ public class WindowMain extends javax.swing.JFrame {
 
         combine.setText("Combine");
         combine.addActionListener(new java.awt.event.ActionListener() {
-            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 combineActionPerformed(evt);
             }
@@ -389,7 +362,6 @@ public class WindowMain extends javax.swing.JFrame {
         dragAndDrop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         dragAndDrop.setForeground(new java.awt.Color(25, 25, 25));
         dragAndDrop.addContainerListener(new java.awt.event.ContainerAdapter() {
-            @Override
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 dragAndDropComponentAdded(evt);
             }
@@ -399,15 +371,23 @@ public class WindowMain extends javax.swing.JFrame {
 
         javax.swing.GroupLayout dragAndDropLayout = new javax.swing.GroupLayout(dragAndDrop);
         dragAndDrop.setLayout(dragAndDropLayout);
-        dragAndDropLayout.setHorizontalGroup(dragAndDropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                dragAndDropLayout.createSequentialGroup().addGap(24, 24, 24).addComponent(dropLabel).addContainerGap(34, Short.MAX_VALUE)));
-        dragAndDropLayout.setVerticalGroup(dragAndDropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                dragAndDropLayout.createSequentialGroup().addGap(53, 53, 53).addComponent(dropLabel)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        dragAndDropLayout.setHorizontalGroup(
+            dragAndDropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dragAndDropLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(dropLabel)
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        dragAndDropLayout.setVerticalGroup(
+            dragAndDropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dragAndDropLayout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(dropLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         evenPages.setText("Even Pages");
         evenPages.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 evenPagesMouseClicked(evt);
             }
@@ -415,7 +395,6 @@ public class WindowMain extends javax.swing.JFrame {
 
         supplierCheck.setText("Supplier Receiving Document");
         supplierCheck.addActionListener(new java.awt.event.ActionListener() {
-            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 supplierCheckActionPerformed(evt);
             }
@@ -425,7 +404,6 @@ public class WindowMain extends javax.swing.JFrame {
         dragAndDropSplit.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         dragAndDropSplit.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         dragAndDropSplit.addContainerListener(new java.awt.event.ContainerAdapter() {
-            @Override
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 dragAndDropSplitComponentAdded(evt);
             }
@@ -435,10 +413,20 @@ public class WindowMain extends javax.swing.JFrame {
 
         javax.swing.GroupLayout dragAndDropSplitLayout = new javax.swing.GroupLayout(dragAndDropSplit);
         dragAndDropSplit.setLayout(dragAndDropSplitLayout);
-        dragAndDropSplitLayout.setHorizontalGroup(dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                dragAndDropSplitLayout.createSequentialGroup().addGap(44, 44, 44).addComponent(jLabel1).addContainerGap(52, Short.MAX_VALUE)));
-        dragAndDropSplitLayout.setVerticalGroup(dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                dragAndDropSplitLayout.createSequentialGroup().addGap(54, 54, 54).addComponent(jLabel1).addContainerGap(57, Short.MAX_VALUE)));
+        dragAndDropSplitLayout.setHorizontalGroup(
+            dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dragAndDropSplitLayout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel1)
+                .addContainerGap(52, Short.MAX_VALUE))
+        );
+        dragAndDropSplitLayout.setVerticalGroup(
+            dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dragAndDropSplitLayout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(jLabel1)
+                .addContainerGap(57, Short.MAX_VALUE))
+        );
 
         progressListing.setColumns(20);
         progressListing.setRows(5);
@@ -446,7 +434,6 @@ public class WindowMain extends javax.swing.JFrame {
 
         copiesCheck.setText("Create Copies");
         copiesCheck.addActionListener(new java.awt.event.ActionListener() {
-            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 copiesCheckActionPerformed(evt);
             }
@@ -470,77 +457,75 @@ public class WindowMain extends javax.swing.JFrame {
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(
-                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(
-                                                layout.createSequentialGroup().addComponent(directoryLabel)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(directoryField)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(buttonBrowse))
-                                        .addComponent(jScrollPane1)
-                                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jSeparator1)
-                                        .addGroup(
-                                                layout.createSequentialGroup()
-                                                        .addComponent(combine)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(evenPages)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(supplierCheck)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(exitButton)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(okButton))
-                                        .addGroup(
-                                                layout.createSequentialGroup()
-                                                        .addGroup(
-                                                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(copiesCheck)
-                                                                        .addComponent(titleLabel)
-                                                                        .addComponent(instructions)
-                                                                        .addGroup(
-                                                                                layout.createSequentialGroup()
-                                                                                        .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                        .addGap(0, 0, Short.MAX_VALUE))).addContainerGap()));
-        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(
-                        layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(titleLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(instructions)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(
-                                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(directoryLabel)
-                                                .addComponent(directoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(buttonBrowse))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(
-                                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        Short.MAX_VALUE)
-                                                .addComponent(dragAndDrop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                                .addComponent(copiesCheck)
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(directoryLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(directoryField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonBrowse))
+                    .addComponent(jScrollPane1)
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(combine)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(evenPages)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(supplierCheck)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exitButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(okButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(copiesCheck)
+                            .addComponent(titleLabel)
+                            .addComponent(instructions)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(
-                                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(okButton).addComponent(exitButton)
-                                                .addComponent(combine).addComponent(evenPages).addComponent(supplierCheck)).addContainerGap()));
+                                .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(titleLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(instructions)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(directoryLabel)
+                    .addComponent(directoryField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonBrowse))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dragAndDrop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(copiesCheck)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(okButton)
+                    .addComponent(exitButton)
+                    .addComponent(combine)
+                    .addComponent(evenPages)
+                    .addComponent(supplierCheck))
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
