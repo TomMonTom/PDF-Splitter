@@ -79,13 +79,13 @@ public class WindowMain extends javax.swing.JFrame{
     public javax.swing.JButton exitButton;
     public javax.swing.JLabel instructions;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenuBar menuBar;
     public javax.swing.JButton okButton;
     private javax.swing.JMenuItem paste;
     public javax.swing.JProgressBar progressBar;
-    public javax.swing.JTextArea progressListing;
+    public javax.swing.JTextPane progressListing;
     private javax.swing.JCheckBox supplierCheck;
     public javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
@@ -117,7 +117,7 @@ public class WindowMain extends javax.swing.JFrame{
         for (int i = 0; i < files.length; i++) {
             try {
                 combiner.pdfMerge(files);
-            } catch (DocumentException | IOException ex) {
+            } catch (DocumentException ex) {
                 Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -186,7 +186,7 @@ public class WindowMain extends javax.swing.JFrame{
                     PdfMerge merger = new PdfMerge();
                     // uses the pdfMerge method that passes down a file string.
                     merger.pdfMerge(files);
-                } catch (DocumentException | IOException ex) {
+                } catch (DocumentException ex) {
                     Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -254,9 +254,9 @@ public class WindowMain extends javax.swing.JFrame{
         supplierCheck = new javax.swing.JCheckBox();
         dragAndDropSplit = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        progressListing = new javax.swing.JTextArea();
         copiesCheck = new javax.swing.JCheckBox();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        progressListing = new javax.swing.JTextPane();
         menuBar = new javax.swing.JMenuBar();
         edit = new javax.swing.JMenu();
         copyItem = new javax.swing.JMenuItem();
@@ -398,16 +398,14 @@ public class WindowMain extends javax.swing.JFrame{
                 .addContainerGap(57, Short.MAX_VALUE))
         );
 
-        progressListing.setColumns(20);
-        progressListing.setRows(5);
-        jScrollPane1.setViewportView(progressListing);
-
         copiesCheck.setText("Create Copies");
         copiesCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 copiesCheckActionPerformed(evt);
             }
         });
+
+        jScrollPane2.setViewportView(progressListing);
 
         edit.setText("Edit");
 
@@ -432,13 +430,13 @@ public class WindowMain extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(directoryLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(directoryField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonBrowse))
-                    .addComponent(jScrollPane1)
                     .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
@@ -484,8 +482,8 @@ public class WindowMain extends javax.swing.JFrame{
                     .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dragAndDrop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(copiesCheck)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)

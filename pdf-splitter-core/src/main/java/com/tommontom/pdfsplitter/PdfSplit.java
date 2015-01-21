@@ -67,6 +67,7 @@ public class PdfSplit extends WindowMain{
                     document.open();
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                     document.close();
+                    progressListing.setText(("Created File:") + path + "\\"+ copy.toString()+"\n");
                 }
 
             } else if (supplierDoc == false) {
@@ -82,7 +83,7 @@ public class PdfSplit extends WindowMain{
                     document.open();
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                     document.close();
-                    progressListing.setText(("Created File:")+ copy.toString()+"\n");
+                    progressListing.setText(("Created File:") + path + "\\"+ copy.toString()+"\n");
                 }
 
                 System.out.println("Number of Documents Created:" + numPages);
