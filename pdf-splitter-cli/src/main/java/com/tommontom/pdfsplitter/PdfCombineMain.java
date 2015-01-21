@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.itextpdf.text.DocumentException;
 
-public abstract class PdfCombineMain {
+public abstract class PdfCombineMain{
     private static final String DEFAULT_PATH = "C:\\Users\\tthompson\\Pictures\\ControlCenter4\\Scan\\Modified\\Combine";
 
     public static void main(String[] argv) throws IOException, DocumentException {

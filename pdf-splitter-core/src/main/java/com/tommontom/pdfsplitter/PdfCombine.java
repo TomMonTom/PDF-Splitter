@@ -20,7 +20,7 @@ import com.itextpdf.text.pdf.PdfReader;
  *
  * @author tthompson
  */
-public class PdfCombine {
+public class PdfCombine extends WindowMain{
 
     public List<File> combine(File folder) throws IOException, DocumentException {
         if (!folder.isDirectory()) {

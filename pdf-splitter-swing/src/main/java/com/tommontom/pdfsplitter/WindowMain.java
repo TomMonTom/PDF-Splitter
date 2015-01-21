@@ -8,54 +8,19 @@ package com.tommontom.pdfsplitter;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.text.DefaultEditorKit;
-
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfCopy;
-import com.itextpdf.text.pdf.PdfImportedPage;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfWriter;
-
 /**
  *
  * @author tthompson
  */
-public class WindowMain extends javax.swing.JFrame {
-    public static void doMerge(java.util.List<InputStream> list, OutputStream outputStream) throws DocumentException, IOException {
-        Document document = new Document();
-        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
-        document.open();
-        PdfContentByte cb = writer.getDirectContent();
-
-        for (InputStream in : list) {
-            PdfReader reader = new PdfReader(in);
-            for (int i = 1; i <= reader.getNumberOfPages(); i++) {
-                document.newPage();
-                // import the page from source pdf
-                PdfImportedPage page = writer.getImportedPage(reader, i);
-                // add the page to the destination pdf
-                cb.addTemplate(page, 0, 0);
-            }
-        }
-
-        outputStream.flush();
-        document.close();
-        outputStream.close();
-    }
-
+public class WindowMain extends javax.swing.JFrame{
     /**
      * @param args
      *            the command line arguments
@@ -120,7 +85,7 @@ public class WindowMain extends javax.swing.JFrame {
     public javax.swing.JButton okButton;
     private javax.swing.JMenuItem paste;
     public javax.swing.JProgressBar progressBar;
-    private javax.swing.JTextArea progressListing;
+    public javax.swing.JTextArea progressListing;
     private javax.swing.JCheckBox supplierCheck;
     public javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
@@ -131,7 +96,7 @@ public class WindowMain extends javax.swing.JFrame {
         initComponents();
         /* Stores the listing of the files */
     }
-
+   
     private void buttonBrowseMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_buttonBrowseMouseClicked
         // Creates a file chooser to properly navigate and select a directory that then sets the text in the directory field for later use.
         directoryField.setForeground(Color.BLACK);
@@ -145,16 +110,18 @@ public class WindowMain extends javax.swing.JFrame {
 
     private void combineActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_combineActionPerformed
         // TODO add your handling code here:
+        PdfMerge combiner = new PdfMerge();
         File folder = new File(directoryField.getText());
         FileNameFilter FileFilter = new FileNameFilter();
         File[] files = folder.listFiles(FileFilter);
         for (int i = 0; i < files.length; i++) {
             try {
-                pdfMerge(files);
+                combiner.pdfMerge(files);
             } catch (DocumentException | IOException ex) {
                 Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
     }// GEN-LAST:event_combineActionPerformed
 
     private void copiesCheckActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_copiesCheckActionPerformed
@@ -210,13 +177,15 @@ public class WindowMain extends javax.swing.JFrame {
 
     private void dragAndDropComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropComponentAdded
         // Code used for the drag and drop portion of the combine function
+        
         new FileDrop(dragAndDrop, new FileDrop.Listener() {
             // initializes a drag and drop interface to then use an object
             @Override
             public void filesDropped(File[] files) {
                 try {
+                    PdfMerge merger = new PdfMerge();
                     // uses the pdfMerge method that passes down a file string.
-                    pdfMerge(files);
+                    merger.pdfMerge(files);
                 } catch (DocumentException | IOException ex) {
                     Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -228,14 +197,13 @@ public class WindowMain extends javax.swing.JFrame {
     private void dragAndDropSplitComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropSplitComponentAdded
         // Drag and drop zone to split pdf documents that are dragged and dropped into the JPanel.
         new FileDrop(dragAndDropSplit, new FileDrop.Listener() {
-            @Override
             public void filesDropped(File[] files) {
+                PdfSplit dropSplit = new PdfSplit();
                 try {
-                    // handle file drop
-                    pdfSplitDrop(files);
-                } catch (DocumentException ex) {
-                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                    dropSplit.pdfSplitDrop(files);
                 } catch (IOException ex) {
+                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (DocumentException ex) {
                     Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -243,12 +211,14 @@ public class WindowMain extends javax.swing.JFrame {
     }// GEN-LAST:event_dragAndDropSplitComponentAdded
 
     private void evenPagesMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_evenPagesMouseClicked
+        PdfSplit evenSplit = new PdfSplit();
+        String path = directoryField.getText();
         try {
             /*
              * Execute method pdfEven when the button is clicked. The method takes pages that are even set and makes one pdf documents consisting of two pages
              * found within the main pdf document.
              */
-            pdfEven();
+            evenSplit.pdfEven(path);
         } catch (IOException ex) {
             Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
@@ -531,227 +501,16 @@ public class WindowMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_okButtonActionPerformed
+        PdfSplit okSplit = new PdfSplit();
         try {
-            /*
-             * Execture method pdfSplit. The method splits apart the pdf documents and renames the file to FILENAME(#).pdf
-             */
-            pdfSplit();
-        } catch (IOException ex) {
-            Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            String path = directoryField.getText();
+            okSplit.pdfSplit(path);
+                } catch (IOException ex) {
+                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (DocumentException ex) {
+                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
     }// GEN-LAST:event_okButtonActionPerformed
-
-    public void pdfEven() throws IOException, DocumentException {
-
-        String DEFAULT_PATH = directoryField.getText(); // TODO Instead of hard code path, pass in as argument
-        File folder = new File(DEFAULT_PATH);
-        FileNameFilter FileFilter = new FileNameFilter();
-        File[] listOfFiles = folder.listFiles(FileFilter); /* Stores the listing of the files */
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-            File file = listOfFiles[i];
-            if (!file.isFile()) {
-                continue;
-            }
-
-            // Split the source filename into its 2 parts
-            String fileName = file.getName();
-            String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-
-            // Split on a space '\s'
-            String[] fileNames = fileNameWithoutExt.split("\\s");
-            if (fileNames.length != 2) {
-                throw new RuntimeException("File name format is not in right format");
-            }
-
-            String fileNameFirst = fileNames[0];
-            String fileNameSecond = fileNames[1];
-            System.out.println("First lot number: " + fileNameFirst + " Second lot number: " + fileNameSecond);
-            String[] fileNameFirstParts = fileNameFirst.split("-");
-            String[] fileNameSecondParts = fileNameSecond.split("-");
-
-            // Project num is always the 1st part
-            String projectNum = fileNameFirstParts[0];
-            if (!projectNum.equals(fileNameSecondParts[0])) {
-                throw new RuntimeException("Filename needs to be renamed to the correct format");
-            }
-            // Strip off the first and second lot number, parse into integers
-            int firstLotNum;
-            int secondLotNum;
-            firstLotNum = Integer.parseInt(fileNameFirstParts[1]);
-            secondLotNum = Integer.parseInt(fileNameSecondParts[1]);
-
-            // Determine number of pages by difference of lot numbers
-            // Read in the source document
-            // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
-            PdfReader pdfFileReader = new PdfReader(file.getPath());
-            int mod = pdfFileReader.getNumberOfPages() % 2;
-            if (pdfFileReader.equals(mod)) {
-                throw new RuntimeException("File is not an even number of pages");
-            }
-            Document document = new Document(); /* instantiates a new document to be made */
-
-            int numPages = secondLotNum - firstLotNum + 1;
-            int p = 0;
-            int j = 1;
-            // Create a copy of the orignal source file. We will pick specific pages out below
-            document.open();
-            while (j < numPages) {
-                j++;
-                if (j % 2 == 1) {
-                    j += 1;
-                }
-                firstLotNum++;
-                String FileName = projectNum + "-" + (firstLotNum - 1) + ".pdf"; /* Dynamic file name */
-
-                document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(DEFAULT_PATH + "\\" + FileName));
-                document.open();
-                p += 2;
-                copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-
-                copy.addPage(copy.getImportedPage(pdfFileReader, p));
-                document.close();
-
-            }
-            System.out.println("Number of Documents Created:" + numPages);
-            System.out.println("Number of Documents Created:" + listOfFiles[i]);
-        }
-    }
-
-    public void pdfMerge(File[] files) throws DocumentException, IOException {
-        File newFiles = files[0]; // Takes the name of the first file within the list in the explorer and uses that file name as a base name
-        String DEFAULT_PATH = newFiles.getParent();
-        // if the directoryfield contains text, then use that field as the save path for combining pdfs.
-        if (directoryField.getText() != null) {
-            DEFAULT_PATH = directoryField.getText();
-        }
-        System.out.println(DEFAULT_PATH);
-
-        // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
-        Arrays.sort(files);
-
-        PdfMerge pdfMerge = new PdfMerge();
-        pdfMerge.merge(newFiles, files);
-
-    }
-
-    public void pdfSplit() throws IOException, DocumentException {
-        String DEFAULT_PATH = directoryField.getText();
-        // TODO Instead of hard code path, pass in as argument
-        String path;
-        path = DEFAULT_PATH;
-        File folder = new File(path);
-        FileNameFilter FileFilter = new FileNameFilter();
-        File[] listOfFiles = folder.listFiles(FileFilter); /* Stores the listing of the files */
-        for (int i = 0; i < listOfFiles.length; i++) {
-            File file = listOfFiles[i];
-            if (!file.isFile()) {
-                continue;
-            }
-            // Split the source filename into its 2 parts
-            String fileName = file.getName();
-            String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-            PdfReader pdfFileReader = new PdfReader(file.getPath());
-            Document document = new Document(); /* instantiates a new document to be made */
-            int numPages = pdfFileReader.getNumberOfPages();
-            if (supplierDoc == true) {
-                // Split on a space '\s'
-                String[] fileNames = fileNameWithoutExt.split("\\s");
-                /*
-                 * if (fileNames.length != 2) { throw new RuntimeException("File name format is not in right format"); }
-                 */
-
-                String fileNameFirst = fileNames[0];
-                String fileNameSecond = fileNames[1];
-                System.out.println("First lot number: " + fileNameFirst + " Second lot number: " + fileNameSecond);
-                String[] fileNameFirstParts = fileNameFirst.split("-");
-                String[] fileNameSecondParts = fileNameSecond.split("-");
-
-                // Project num is always the 1st part
-                String projectNum = fileNameFirstParts[0];
-                if (!projectNum.equals(fileNameSecondParts[0])) {
-                    throw new RuntimeException("Filename needs to be renamed to the correct format");
-                }
-
-                // Strip off the first and second lot number, parse into integers
-                int firstLotNum;
-                int secondLotNum;
-                firstLotNum = Integer.parseInt(fileNameFirstParts[1]);
-                secondLotNum = Integer.parseInt(fileNameSecondParts[1]);
-                // Create a copy of the orignal source file. We will pick specific pages out below
-                document.open();
-                for (int j = 1; j < numPages + 1; j++) {
-                    String FileName = projectNum + "-" + (firstLotNum) + ".pdf"; /* Dynamic file name */
-                    firstLotNum++;
-                    document = new Document();
-                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName));
-                    document.open();
-                    copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-                    document.close();
-                }
-
-            } else if (supplierDoc == false) {
-                // Determine number of pages by difference of lot numbers
-                // Read in the source document
-                // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
-                // Create a copy of the orignal source file. We will pick specific pages out below
-                document.open();
-                for (int j = 1; j < numPages + 1; j++) {
-                    String FileName = (fileNameWithoutExt); /* Dynamic file name */
-                    document = new Document();
-                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName + "(" + j + ")" + ".pdf"));
-                    document.open();
-                    copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-                    document.close();
-                }
-
-                System.out.println("Number of Documents Created:" + numPages);
-            } else {
-                break;
-            }
-            pdfFileReader.close();
-        }
-    }
-
-    public void pdfSplitDrop(File[] files) throws IOException, DocumentException {
-        // TODO Instead of hard code path, pass in as argument
-        String path = files[0].getParent();
-        File[] listOfFiles = files; /* Stores the listing of the files */
-        for (int i = 0; i < listOfFiles.length; i++) {
-            File file = listOfFiles[i];
-            if (!file.isFile()) {
-                continue;
-            }
-            System.out.println(directoryField.getText());
-            System.out.println(example);
-            // Split the source filename into its 2 parts
-            String fileName = file.getName();
-            String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-            PdfReader pdfFileReader = new PdfReader(file.getPath());
-            Document document = new Document(); /* instantiates a new document to be made */
-            int numPages = pdfFileReader.getNumberOfPages();
-            // Determine number of pages by difference of lot numbers
-            // Read in the source document
-            // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
-            // Create a copy of the orignal source file. We will pick specific pages out below
-            document.open();
-            for (int j = 1; j < numPages + 1; j++) {
-                String FileName = (fileNameWithoutExt); /* Dynamic file name */
-                document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName + "(" + j + ")" + ".pdf"));
-                document.open();
-                copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-                document.close();
-            }
-            System.out.println("Number of Documents Created:" + numPages);
-            pdfFileReader.close();
-        }
-
-    }
-
     private void supplierCheckActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_supplierCheckActionPerformed
         // Radio button to utilize a rename function for specific organization needs.
         if (supplierCheck.isSelected()) {

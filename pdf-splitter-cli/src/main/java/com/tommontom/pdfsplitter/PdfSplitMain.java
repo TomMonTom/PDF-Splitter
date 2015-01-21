@@ -17,6 +17,6 @@ public abstract class PdfSplitMain {
         }
 
         PdfSplit pdfSplit = new PdfSplit();
-        pdfSplit.split(path);
+        pdfSplit.pdfSplit(path);
     }
 }
