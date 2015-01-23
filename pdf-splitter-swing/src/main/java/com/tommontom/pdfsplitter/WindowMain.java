@@ -18,7 +18,8 @@ import javax.swing.text.DefaultEditorKit;
 import com.itextpdf.text.DocumentException;
 /**
  *
- * @author tthompson
+ * @author Thomas Thompson, Jeffery Jenkins
+ * @version 0.0.1
  */
 public class WindowMain extends javax.swing.JFrame{
     /**

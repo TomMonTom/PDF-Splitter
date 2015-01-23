@@ -51,6 +51,8 @@
         <dependency>
             <groupId>com.tommontom.pdfsplitter</groupId>
             <artifactId>pdf-splitter-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 </project>

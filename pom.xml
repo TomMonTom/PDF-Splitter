@@ -16,14 +16,15 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencyManagement>
         <dependencies>
+           
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.4</version>
             </dependency>
+            
             <dependency>
                 <groupId>com.itextpdf</groupId>
                 <artifactId>itextpdf</artifactId>
@@ -34,22 +35,14 @@
                 <artifactId>junit</artifactId>
                 <version>4.10</version>
             </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>pdf-splitter-core</artifactId>
-                <version>${project.version}</version>
-                <scope>compile</scope>
-                <type>jar</type>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <modules>
-        <module>pdf-splitter-core</module>
         <module>pdf-splitter-swing</module>
+        <module>pdf-splitter-core</module>
         <module>pdf-splitter-cli</module>
     </modules>
-
     <build>
         <pluginManagement>
             <plugins>
@@ -68,9 +61,10 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                     <proc>none</proc>
+                    <archive>
+        </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

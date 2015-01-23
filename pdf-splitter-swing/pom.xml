@@ -5,7 +5,7 @@
         <groupId>com.tommontom.pdfsplitter</groupId>
         <artifactId>pdf-splitter</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>750GB/Users/Admin 1/Documents/Projects/TDMT STUDIOS/NetBeansProjects/PDF-Splitter/pom.xml</relativePath>
     </parent>
 
     <artifactId>pdf-splitter-swing</artifactId>
@@ -42,16 +42,10 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.tommontom.pdfsplitter</groupId>
-            <artifactId>pdf-splitter-core</artifactId>
+            <version>5.5.4</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

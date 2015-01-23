@@ -110,7 +110,6 @@ public class FileDrop
      * the parameter <tt>out</tt> will result in no debugging output.
      *
      * @param out PrintStream to record debugging info or null for no debugging.
-     * @param out 
      * @param c Component on which files will be dropped.
      * @param listener Listens for <tt>filesDropped</tt>.
      * @since 1.0
@@ -139,7 +138,6 @@ public class FileDrop
      * the parameter <tt>out</tt> will result in no debugging output.
      *
      * @param out PrintStream to record debugging info or null for no debugging.
-     * @param out 
      * @param c Component on which files will be dropped.
      * @param recursive Recursively set children as drop targets.
      * @param listener Listens for <tt>filesDropped</tt>.
@@ -562,6 +560,7 @@ public class FileDrop
      *
      * @param c The component to unregister as a drop target
      * @since 1.0
+     * @return the image at the specified URL
      */
     public static boolean remove( java.awt.Component c)
     {   return remove( null, c, true );
@@ -578,6 +577,7 @@ public class FileDrop
      * @param c The component to unregister
      * @param recursive Recursively unregister components within a container
      * @since 1.0
+     * @return remove hooks
      */
     public static boolean remove( java.io.PrintStream out, java.awt.Component c, boolean recursive )
     {   // Make sure we support dnd.
@@ -602,18 +602,7 @@ public class FileDrop
     
     
     /**
-     * Implement this inner interface to listen for when files are dropped. For example
-     * your class declaration may begin like this:
-     * <code><pre>
-     *      public class MyClass implements FileDrop.Listener
-     *      ...
-     *      public void filesDropped( java.io.File[] files )
-     *      {
-     *          ...
-     *      }   // end filesDropped
-     *      ...
-     * </pre></code>
-     *
+     * Implement this inner interface to listen for when files are dropped.      *
      * @since 1.1
      */
     public static interface Listener {
@@ -634,11 +623,6 @@ public class FileDrop
     
     
     /**
-     * This is the event that is passed to the
-     * {@link FileDropListener#filesDropped filesDropped(...)} method in
-     * your {@link FileDropListener} when files are dropped onto
-     * a registered drop target.
-     *
      * <p>I'm releasing this code into the Public Domain. Enjoy.</p>
      * 
      * @author  Robert Harder
@@ -655,7 +639,7 @@ public class FileDrop
          * {@link FileDrop} that initiated the event.
          *
          * @param files The array of files that were dropped
-         * @source The event source
+         * @param source The event source
          * @since 1.1
          */
         public Event( java.io.File[] files, Object source ) {
@@ -822,12 +806,6 @@ public class FileDrop
 
 
         /**
-         * Returns a two- or three-element array containing first
-         * the custom data flavor, if one was created in the constructors,
-         * second the default {@link #DATA_FLAVOR} associated with
-         * {@link TransferableObject}, and third the
-         * {@link java.awt.datatransfer.DataFlavor.stringFlavor}.
-         *
          * @return An array of supported data flavors
          * @since 1.1
          */
@@ -910,8 +888,7 @@ public class FileDrop
          * on the {@link TransferableObject}, the {@link Fetcher}'s
          * {@link #getObject getObject()} method will be called.
          *
-         * @author Robert Harder
-         * @copyright 2001
+         * @author Robert Harder Copywrite 2001
          * @version 1.1
          * @since 1.1
          */
