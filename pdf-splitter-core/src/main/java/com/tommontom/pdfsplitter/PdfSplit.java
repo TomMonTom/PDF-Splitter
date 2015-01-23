@@ -14,14 +14,13 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.tommontom.pdfsplitter.FileNameFilter;
-import com.tommontom.pdfsplitter.WindowMain;
 
 /**
  *
  * @author tthompson
  */
-public class PdfSplit extends WindowMain{
-
+public class PdfSplit{
+    public boolean supplierDoc;
     public void pdfSplit(String path) throws IOException, DocumentException {
         // TODO Instead of hard code path, pass in as argument
         File folder = new File(path);
@@ -69,7 +68,6 @@ public class PdfSplit extends WindowMain{
                     document.open();
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                     document.close();
-                    progressListing.setText(("Created File:") + path + "\\"+ copy.toString()+"\n");
                 }
 
             } else if (supplierDoc == false) {
@@ -85,7 +83,6 @@ public class PdfSplit extends WindowMain{
                     document.open();
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                     document.close();
-                    progressListing.setText(("Created File:") + path + "\\"+ copy.toString()+"\n");
                 }
 
                 System.out.println("Number of Documents Created:" + numPages);
@@ -105,8 +102,6 @@ public class PdfSplit extends WindowMain{
             if (!file.isFile()) {
                 continue;
             }
-            System.out.println(directoryField.getText());
-            System.out.println(example);
             // Split the source filename into its 2 parts
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -125,7 +120,6 @@ public class PdfSplit extends WindowMain{
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 document.close();
-                progressListing.setText(("Created File:")+ copy.toString()+"\n");
             }
             System.out.println("Number of Documents Created:" + numPages);
             pdfFileReader.close();
@@ -204,7 +198,6 @@ public class PdfSplit extends WindowMain{
 
                 copy.addPage(copy.getImportedPage(pdfFileReader, p));
                 document.close();
-                progressListing.setText(("Created File:")+ copy.toString()+"\n");
 
             }
             System.out.println("Number of Documents Created:" + numPages);
