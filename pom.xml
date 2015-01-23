@@ -43,20 +43,29 @@
         <module>pdf-splitter-core</module>
         <module>pdf-splitter-cli</module>
     </modules>
-   <build>
-    <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>2.4</version>
-          <configuration>
-              <archive>
-                  <manifest>
-                      <mainClass>com.tommontom.pdfsplitter</mainClass>
-                  </manifest>
-              </archive>
-          </configuration>
-      </plugin>
-  </plugins>
-</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <version>2.3.2</version>
+                    <target>${maven.compiler.target}</target>
+                    <proc>none</proc>
+                    <archive>
+        </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
