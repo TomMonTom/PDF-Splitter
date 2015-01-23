@@ -14,6 +14,7 @@
     <description>Swing UI for PDF-Splitter</description>
 
     <build>
+
         <finalName>pdfsplitter-swing</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
@@ -46,12 +47,6 @@
             <artifactId>itextpdf</artifactId>
             <version>5.5.4</version>
             <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

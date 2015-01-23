@@ -16,13 +16,13 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.tommontom.pdfsplitter.FileNameFilter;
-import com.tommontom.pdfsplitter.WindowMain;
+import com.tommontom.pdfsplitter.Main;
 
 /**
  *
  * @author tthompson
  */
-public class PdfCombine extends WindowMain{
+public class PdfCombine extends Main{
 
     public List<File> combine(File folder) throws IOException, DocumentException {
         if (!folder.isDirectory()) {

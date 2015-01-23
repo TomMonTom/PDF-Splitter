@@ -13,7 +13,6 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
-import com.tommontom.pdfsplitter.FileNameFilter;
 
 /**
  *

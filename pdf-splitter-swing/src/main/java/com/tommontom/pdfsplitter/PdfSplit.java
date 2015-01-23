@@ -14,13 +14,13 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.tommontom.pdfsplitter.FileNameFilter;
-import com.tommontom.pdfsplitter.WindowMain;
+import com.tommontom.pdfsplitter.Main;
 
 /**
  *
  * @author tthompson
  */
-public class PdfSplit extends WindowMain{
+public class PdfSplit extends Main{
 
     public void pdfSplit(String path) throws IOException, DocumentException {
         // TODO Instead of hard code path, pass in as argument
@@ -65,11 +65,10 @@ public class PdfSplit extends WindowMain{
                     String FileName = projectNum + "-" + (firstLotNum) + ".pdf"; /* Dynamic file name */
                     firstLotNum++;
                     document = new Document();
-                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName));
+                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName));
                     document.open();
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                     document.close();
-                    progressListing.setText(("Created File:") + path + "\\"+ copy.toString()+"\n");
                 }
 
             } else if (supplierDoc == false) {
@@ -81,11 +80,11 @@ public class PdfSplit extends WindowMain{
                 for (int j = 1; j < numPages + 1; j++) {
                     String FileName = (fileNameWithoutExt); /* Dynamic file name */
                     document = new Document();
-                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName + "(" + j + ")" + ".pdf"));
+                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                     document.open();
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                     document.close();
-                    progressListing.setText(("Created File:") + path + "\\"+ copy.toString()+"\n");
+                    progressListing.setText(("Created File:") + path + "/"+ copy.toString()+"\n");
                 }
 
                 System.out.println("Number of Documents Created:" + numPages);
@@ -105,8 +104,6 @@ public class PdfSplit extends WindowMain{
             if (!file.isFile()) {
                 continue;
             }
-            System.out.println(directoryField.getText());
-            System.out.println(example);
             // Split the source filename into its 2 parts
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -121,11 +118,11 @@ public class PdfSplit extends WindowMain{
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
                 document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName + "(" + j + ")" + ".pdf"));
+                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
                 document.close();
-                progressListing.setText(("Created File:")+ copy.toString()+"\n");
+                //progressUpdate(("Created File:")+ files[0].getName()+"\n");
             }
             System.out.println("Number of Documents Created:" + numPages);
             pdfFileReader.close();
@@ -197,7 +194,7 @@ public class PdfSplit extends WindowMain{
                 String FileName = projectNum + "-" + (firstLotNum - 1) + ".pdf"; /* Dynamic file name */
 
                 document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(DEFAULT_PATH + "\\" + FileName));
+                PdfCopy copy = new PdfCopy(document, new FileOutputStream(DEFAULT_PATH + "//" + FileName));
                 document.open();
                 p += 2;
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */

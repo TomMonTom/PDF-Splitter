@@ -21,7 +21,7 @@ import com.itextpdf.text.DocumentException;
  * @author Thomas Thompson, Jeffery Jenkins
  * @version 0.0.1
  */
-public class WindowMain extends javax.swing.JFrame{
+public class Main extends javax.swing.JFrame{
     /**
      * @param args
      *            the command line arguments
@@ -42,20 +42,20 @@ public class WindowMain extends javax.swing.JFrame{
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WindowMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WindowMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WindowMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WindowMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         // </editor-fold>
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new WindowMain().setVisible(true);
+                new Main().setVisible(true);
             }
         });
 
@@ -80,20 +80,20 @@ public class WindowMain extends javax.swing.JFrame{
     public javax.swing.JButton exitButton;
     public javax.swing.JLabel instructions;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenuBar menuBar;
     public javax.swing.JButton okButton;
     private javax.swing.JMenuItem paste;
     public javax.swing.JProgressBar progressBar;
-    public javax.swing.JTextPane progressListing;
+    public javax.swing.JTextArea progressListing;
     private javax.swing.JCheckBox supplierCheck;
     public javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
     /**
      * Creates new form WindowMain
      */
-    public WindowMain() {
+    public Main() {
         initComponents();
         /* Stores the listing of the files */
     }
@@ -119,7 +119,7 @@ public class WindowMain extends javax.swing.JFrame{
             try {
                 combiner.pdfMerge(files);
             } catch (DocumentException ex) {
-                Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -188,7 +188,7 @@ public class WindowMain extends javax.swing.JFrame{
                     // uses the pdfMerge method that passes down a file string.
                     merger.pdfMerge(files);
                 } catch (DocumentException ex) {
-                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -202,10 +202,11 @@ public class WindowMain extends javax.swing.JFrame{
                 PdfSplit dropSplit = new PdfSplit();
                 try {
                     dropSplit.pdfSplitDrop(files);
+                    progressUpdate(files);
                 } catch (IOException ex) {
-                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (DocumentException ex) {
-                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -221,9 +222,9 @@ public class WindowMain extends javax.swing.JFrame{
              */
             evenSplit.pdfEven(path);
         } catch (IOException ex) {
-            Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
-            Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }// GEN-LAST:event_evenPagesMouseClicked
 
@@ -256,8 +257,8 @@ public class WindowMain extends javax.swing.JFrame{
         dragAndDropSplit = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         copiesCheck = new javax.swing.JCheckBox();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        progressListing = new javax.swing.JTextPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        progressListing = new javax.swing.JTextArea();
         menuBar = new javax.swing.JMenuBar();
         edit = new javax.swing.JMenu();
         copyItem = new javax.swing.JMenuItem();
@@ -406,7 +407,10 @@ public class WindowMain extends javax.swing.JFrame{
             }
         });
 
-        jScrollPane2.setViewportView(progressListing);
+        progressListing.setColumns(20);
+        progressListing.setRows(5);
+        progressListing.setDragEnabled(false);
+        jScrollPane1.setViewportView(progressListing);
 
         edit.setText("Edit");
 
@@ -431,7 +435,6 @@ public class WindowMain extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(directoryLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -452,6 +455,7 @@ public class WindowMain extends javax.swing.JFrame{
                         .addComponent(okButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(copiesCheck)
                             .addComponent(titleLabel)
                             .addComponent(instructions)
@@ -483,7 +487,7 @@ public class WindowMain extends javax.swing.JFrame{
                     .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dragAndDrop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(copiesCheck)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -505,9 +509,9 @@ public class WindowMain extends javax.swing.JFrame{
             String path = directoryField.getText();
             okSplit.pdfSplit(path);
                 } catch (IOException ex) {
-                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (DocumentException ex) {
-                    Logger.getLogger(WindowMain.class.getName()).log(Level.SEVERE, null, ex);
+                
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
     }// GEN-LAST:event_okButtonActionPerformed
     private void supplierCheckActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_supplierCheckActionPerformed
@@ -521,4 +525,12 @@ public class WindowMain extends javax.swing.JFrame{
         }
 
     }// GEN-LAST:event_supplierCheckActionPerformed
+    
+    public void progressUpdate(File [] files){
+        progressListing.insert("Modifying files:\n",0);
+        for (File file : files) {
+            progressListing.insert("\t"+file.getName() + "\n", 0); 
+        }
+        
+}
 }

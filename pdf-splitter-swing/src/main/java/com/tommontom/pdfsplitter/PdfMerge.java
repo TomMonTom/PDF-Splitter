@@ -24,11 +24,11 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.tommontom.pdfsplitter.WindowMain;
+import com.tommontom.pdfsplitter.Main;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-public class PdfMerge extends WindowMain{
+public class PdfMerge extends Main{
 
       public static void doMerge(java.util.List<InputStream> list, OutputStream outputStream)
             throws DocumentException, IOException {
@@ -67,10 +67,10 @@ public class PdfMerge extends WindowMain{
                 try {
                     //add the file info to a list with the path and filename in place. then output the information to the doMerge method.
                     for ( i = 0; i < listOfFiles.length; i++) {
-                        list.add(new FileInputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[i].getName())));
+                        list.add(new FileInputStream(new File(DEFAULT_PATH + "/" + listOfFiles[i].getName())));
                         progressListing.setText(("Created File:"+listOfFiles[i].getName()));
                     }
-                    OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[0].getName()+".pdf"));
+                    OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "/" + listOfFiles[0].getName()+".pdf"));
                     doMerge(list, out);
                     
                 } catch (FileNotFoundException e) {
