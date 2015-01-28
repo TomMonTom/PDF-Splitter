@@ -60,7 +60,6 @@ public class Main extends javax.swing.JFrame{
         });
 
     }
-
     public boolean copyCheck;
     public boolean supplierDoc;
     String example = "eg: C:\\MyDirectory";
@@ -86,7 +85,7 @@ public class Main extends javax.swing.JFrame{
     public javax.swing.JButton okButton;
     private javax.swing.JMenuItem paste;
     public javax.swing.JProgressBar progressBar;
-    public javax.swing.JTextArea progressListing;
+    private javax.swing.JTextArea progressListing;
     private javax.swing.JCheckBox supplierCheck;
     public javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
@@ -187,6 +186,7 @@ public class Main extends javax.swing.JFrame{
                     PdfMerge merger = new PdfMerge();
                     // uses the pdfMerge method that passes down a file string.
                     merger.pdfMerge(files);
+                    progressListing.insert(merger.getdatacounter(), 0);
                 } catch (DocumentException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -194,7 +194,6 @@ public class Main extends javax.swing.JFrame{
 
         });
     }// GEN-LAST:event_dragAndDropComponentAdded
-
     private void dragAndDropSplitComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropSplitComponentAdded
         // Drag and drop zone to split pdf documents that are dragged and dropped into the JPanel.
         new FileDrop(dragAndDropSplit, new FileDrop.Listener() {
@@ -202,7 +201,7 @@ public class Main extends javax.swing.JFrame{
                 PdfSplit dropSplit = new PdfSplit();
                 try {
                     dropSplit.pdfSplitDrop(files);
-                    progressUpdate(files);
+                    progressListing.insert(dropSplit.getdatacounter(), 0);
                 } catch (IOException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (DocumentException ex) {
@@ -407,6 +406,7 @@ public class Main extends javax.swing.JFrame{
             }
         });
 
+        progressListing.setEditable(false);
         progressListing.setColumns(20);
         progressListing.setRows(5);
         progressListing.setDragEnabled(false);
@@ -523,14 +523,11 @@ public class Main extends javax.swing.JFrame{
             supplierDoc = false;
             System.out.println(supplierDoc);
         }
-
-    }// GEN-LAST:event_supplierCheckActionPerformed
-    
-    public void progressUpdate(File [] files){
-        progressListing.insert("Modifying files:\n",0);
-        for (File file : files) {
-            progressListing.insert("\t"+file.getName() + "\n", 0); 
-        }
         
-}
+    }// GEN-LAST:event_supplierCheckActionPerformed
+         public String output(String output){
+            System.out.println(output);
+             return output;
+        }   
+        
 }

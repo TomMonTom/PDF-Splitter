@@ -14,7 +14,19 @@
     <description>Swing UI for PDF-Splitter</description>
 
     <build>
-
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.tommontom.pdfsplitter</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
         <finalName>pdfsplitter-swing</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
@@ -45,7 +57,6 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.5.4</version>
             <type>jar</type>
         </dependency>
     </dependencies>

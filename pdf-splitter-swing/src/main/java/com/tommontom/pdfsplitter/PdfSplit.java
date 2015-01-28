@@ -13,15 +13,14 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
-import com.tommontom.pdfsplitter.FileNameFilter;
-import com.tommontom.pdfsplitter.Main;
 
 /**
  *
  * @author tthompson
  */
-public class PdfSplit extends Main{
 
+public class PdfSplit extends Main{
+public String newFileListing;
     public void pdfSplit(String path) throws IOException, DocumentException {
         // TODO Instead of hard code path, pass in as argument
         File folder = new File(path);
@@ -77,14 +76,19 @@ public class PdfSplit extends Main{
                 // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
                 // Create a copy of the orignal source file. We will pick specific pages out below
                 document.open();
+                
                 for (int j = 1; j < numPages + 1; j++) {
                     String FileName = (fileNameWithoutExt); /* Dynamic file name */
                     document = new Document();
                     PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                     document.open();
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
+                    if(j==1){
+                    newFileListing = ("Created File:"+path + FileName + "(" + j + ")" + ".pdf"+"\n");
+                    }else if (j>1){
+                    newFileListing += ("Created File:"+path + FileName + "(" + j + ")" + ".pdf"+"\n");
+                    }
                     document.close();
-                    progressListing.setText(("Created File:") + path + "/"+ copy.toString()+"\n");
                 }
 
                 System.out.println("Number of Documents Created:" + numPages);
@@ -114,23 +118,70 @@ public class PdfSplit extends Main{
             // Read in the source document
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
-            document.open();
-            for (int j = 1; j < numPages + 1; j++) {
-                String FileName = (fileNameWithoutExt); /* Dynamic file name */
-                document = new Document();
-                PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
+            if (supplierDoc == true) {
+                // Split on a space '\s'
+                String[] fileNames = fileNameWithoutExt.split("-");
+                /*
+                 * if (fileNames.length != 2) { throw new RuntimeException("File name format is not in right format"); }
+                 */
+
+                String fileNameFirst = fileNames[0];
+                String fileNameSecond = fileNames[1];
+                System.out.println("First lot number: " + fileNameFirst + " Second lot number: " + fileNameSecond);
+                // Project num is always the 1st part
+                String projectNum = fileNames[0];
+                if (!projectNum.equals(fileNames[0])) {
+                    throw new RuntimeException("Filename needs to be renamed to the correct format");
+                }
+
+                // Strip off the first and second lot number, parse into integers
+                int firstLotNum;
+                int secondLotNum;
+                firstLotNum = Integer.parseInt(fileNames[1]);
+                secondLotNum = Integer.parseInt(fileNames[2]);
+                // Create a copy of the orignal source file. We will pick specific pages out below
                 document.open();
-                copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-                document.close();
-                //progressUpdate(("Created File:")+ files[0].getName()+"\n");
-            }
-            System.out.println("Number of Documents Created:" + numPages);
+                for (int j = 1; j < numPages + 1; j++) {
+                    String FileName = projectNum + "-" + (firstLotNum) + ".pdf"; /* Dynamic file name */
+                    firstLotNum++;
+                    document = new Document();
+                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName));
+                    document.open();
+                    copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
+                    
+                     if(j==1){
+                    newFileListing = ("Created File:"+path + FileName + "(" + j + ")" + ".pdf"+"\n");
+                    }else if (j>1){
+                    newFileListing += ("Created File:"+path + FileName + "(" + j + ")" + ".pdf"+"\n");
+                    }
+                    document.close();
+                }
+
+            } else if (supplierDoc == false) {
+                // Determine number of pages by difference of lot numbers
+                // Read in the source document
+                // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
+                // Create a copy of the orignal source file. We will pick specific pages out below
+                document.open();
+                for (int j = 1; j < numPages + 1; j++) {
+                    String FileName = (fileNameWithoutExt); /* Dynamic file name */
+                    document = new Document();
+                    PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
+                    document.open();
+                    copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
+                    if(j==1){
+                    newFileListing = ("Created File:"+path + FileName + "(" + j + ")" + ".pdf"+"\n");
+                    }else if (j>1){
+                    newFileListing += ("Created File:"+path + FileName + "(" + j + ")" + ".pdf"+"\n");
+                    }
+                    document.close();
+                }
             pdfFileReader.close();
         }
-
+        }
     }
 
-     public void pdfEven(String path) throws IOException, DocumentException {
+    public void pdfEven(String path) throws IOException, DocumentException {
 
         String DEFAULT_PATH = path; // TODO Instead of hard code path, pass in as argument
         File folder = new File(DEFAULT_PATH);
@@ -195,17 +246,25 @@ public class PdfSplit extends Main{
 
                 document = new Document();
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(DEFAULT_PATH + "//" + FileName));
+                    if(j==1){
+                    newFileListing = ("Created File:"+DEFAULT_PATH + "//" + FileName+"\n");
+                    }else if (j>1){
+                    newFileListing += ("Created File:"+DEFAULT_PATH + "//" + FileName+"\n");
+                    }
                 document.open();
                 p += 2;
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
 
                 copy.addPage(copy.getImportedPage(pdfFileReader, p));
                 document.close();
-                progressListing.setText(("Created File:")+ copy.toString()+"\n");
 
             }
             System.out.println("Number of Documents Created:" + numPages);
             System.out.println("Number of Documents Created:" + listOfFiles[i]);
         }
     }
+
+public String getdatacounter(){
+    return newFileListing;
+}
 }
