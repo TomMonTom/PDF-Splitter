@@ -183,10 +183,16 @@ public class Main extends javax.swing.JFrame{
             @Override
             public void filesDropped(File[] files) {
                 try {
+                    progressBar.setMaximum(100);
                     PdfMerge merger = new PdfMerge();
                     // uses the pdfMerge method that passes down a file string.
                     merger.pdfMerge(files);
                     progressListing.insert(merger.getdatacounter(), 0);
+                    for (int i=0;i<files.length;i++){
+                        progressBar.setValue(merger.getvalue());
+                    }
+                    
+
                 } catch (DocumentException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }

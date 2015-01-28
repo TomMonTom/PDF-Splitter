@@ -21,6 +21,7 @@ import com.itextpdf.text.pdf.PdfReader;
 
 public class PdfSplit extends Main{
 public String newFileListing;
+public int barUpdate;
     public void pdfSplit(String path) throws IOException, DocumentException {
         // TODO Instead of hard code path, pass in as argument
         File folder = new File(path);
@@ -267,4 +268,7 @@ public String newFileListing;
 public String getdatacounter(){
     return newFileListing;
 }
+    public int getvalue(){
+        return barUpdate;
+    }
 }

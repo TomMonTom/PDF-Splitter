@@ -24,12 +24,12 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.tommontom.pdfsplitter.Main;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 public class PdfMerge extends Main{
 public String newFileListing;
+public int barUpdate=0;
       public static void doMerge(java.util.List<InputStream> list, OutputStream outputStream)
             throws DocumentException, IOException {
         Document document = new Document();
@@ -70,8 +70,13 @@ public String newFileListing;
                         list.add(new FileInputStream(new File(DEFAULT_PATH + "/" + listOfFiles[i].getName())));
                         if(i==0){
                             newFileListing=("Files Merged:"+DEFAULT_PATH + "/" + listOfFiles[i].getName()+"\n");
-                        }else if (i>0){
+                        }if (i>0){
                             newFileListing+=("Files Merged:"+DEFAULT_PATH + "/" + listOfFiles[i].getName()+"\n");
+                        }
+                        barUpdate+=(i+1/listOfFiles.length)*10;
+                        System.out.println(barUpdate);
+                        if (listOfFiles.length==i){
+                            barUpdate=100;
                         }
                     }
                     OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "/" + listOfFiles[0].getName()+".pdf"));
@@ -87,4 +92,7 @@ public String newFileListing;
     public String getdatacounter(){
     return newFileListing;
 }
+    public int getvalue(){
+        return barUpdate;
+    }
 }
