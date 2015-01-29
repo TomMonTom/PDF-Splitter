@@ -16,15 +16,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.text.DefaultEditorKit;
 import com.itextpdf.text.DocumentException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /**
  *
  * @author Thomas Thompson, Jeffery Jenkins
  * @version 0.0.1
  */
-public class Main extends javax.swing.JFrame{
+public class Main extends javax.swing.JFrame {
+
     /**
-     * @param args
-     *            the command line arguments
+     * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -62,11 +65,12 @@ public class Main extends javax.swing.JFrame{
     }
     public boolean copyCheck;
     public boolean supplierDoc;
-    String example = "eg: C:\\MyDirectory";
-    
+    String example = "C:\\User\\PDFstobesplit";
+    public Path deleteFilesPath;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem Exit;
     private javax.swing.JButton buttonBrowse;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JButton combine;
     private javax.swing.JCheckBox copiesCheck;
     private javax.swing.JMenuItem copyItem;
@@ -78,6 +82,7 @@ public class Main extends javax.swing.JFrame{
     private javax.swing.JLabel dropLabel;
     private javax.swing.JMenu edit;
     private javax.swing.JButton evenPages;
+    private javax.swing.JMenuItem exit;
     public javax.swing.JButton exitButton;
     public javax.swing.JLabel instructions;
     private javax.swing.JLabel jLabel1;
@@ -99,7 +104,7 @@ public class Main extends javax.swing.JFrame{
         progressBar.setBorderPainted(true);
         /* Stores the listing of the files */
     }
-   
+
     private void buttonBrowseMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_buttonBrowseMouseClicked
         // Creates a file chooser to properly navigate and select a directory that then sets the text in the directory field for later use.
         directoryField.setForeground(Color.BLACK);
@@ -124,12 +129,8 @@ public class Main extends javax.swing.JFrame{
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-    }// GEN-LAST:event_combineActionPerformed
 
-    private void copiesCheckActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_copiesCheckActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_copiesCheckActionPerformed
+    }// GEN-LAST:event_combineActionPerformed
 
     public JMenuBar createMenuBar() {
         // Creates a menu to copy and paste directory information
@@ -154,44 +155,31 @@ public class Main extends javax.swing.JFrame{
     }
 
     private void directoryFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_directoryFieldActionPerformed
-
-    }// GEN-LAST:event_directoryFieldActionPerformed
-
-    private void directoryFieldComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_directoryFieldComponentAdded
-
-    }// GEN-LAST:event_directoryFieldComponentAdded
-
-    private void directoryFieldFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_directoryFieldFocusGained
-        // TODO add your handling code here:
-    }// GEN-LAST:event_directoryFieldFocusGained
-
-    private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_directoryFieldMouseClicked
-        // TODO add your handling code here:
-
         if (directoryField.getText().equals(example)) {
             directoryField.setText("");
             directoryField.setForeground(Color.BLACK);
         }
+    }// GEN-LAST:event_directoryFieldActionPerformed
+
+    private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_directoryFieldMouseClicked
+        // TODO add your handling code here:
+
+
     }// GEN-LAST:event_directoryFieldMouseClicked
-
-    private void directoryFieldPropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_directoryFieldPropertyChange
-
-    }// GEN-LAST:event_directoryFieldPropertyChange
 
     private void dragAndDropComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropComponentAdded
         // Code used for the drag and drop portion of the combine function
-        
+
         new FileDrop(dragAndDrop, new FileDrop.Listener() {
             // initializes a drag and drop interface to then use an object
             @Override
             public void filesDropped(File[] files) {
                 try {
-                    progressBar.setMaximum(100);
                     PdfMerge merger = new PdfMerge();
                     // uses the pdfMerge method that passes down a file string.
                     merger.pdfMerge(files);
                     progressListing.insert(merger.getdatacounter(), 0);
-                    for (int i=0;i<files.length;i++){
+                    for (int i = 0; i < files.length; i++) {
                         progressBar.setValue(merger.getvalue());
                     }
 
@@ -202,10 +190,12 @@ public class Main extends javax.swing.JFrame{
 
         });
     }// GEN-LAST:event_dragAndDropComponentAdded
+
     private void dragAndDropSplitComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropSplitComponentAdded
         // Drag and drop zone to split pdf documents that are dragged and dropped into the JPanel.
         new FileDrop(dragAndDropSplit, new FileDrop.Listener() {
             public void filesDropped(File[] files) {
+                progressListing.setText("");
                 PdfSplit dropSplit = new PdfSplit();
                 try {
                     dropSplit.pdfSplitDrop(files);
@@ -213,6 +203,8 @@ public class Main extends javax.swing.JFrame{
                 } catch (IOException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (DocumentException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -228,6 +220,7 @@ public class Main extends javax.swing.JFrame{
              * found within the main pdf document.
              */
             evenSplit.pdfEven(path);
+            progressListing.insert(evenSplit.getdatacounter(), 0);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
@@ -240,7 +233,8 @@ public class Main extends javax.swing.JFrame{
     }// GEN-LAST:event_exitButtonActionPerformed
 
     /**
-     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
@@ -266,12 +260,13 @@ public class Main extends javax.swing.JFrame{
         copiesCheck = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         progressListing = new javax.swing.JTextArea();
+        cancelButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         edit = new javax.swing.JMenu();
         copyItem = new javax.swing.JMenuItem();
         paste = new javax.swing.JMenuItem();
         cut = new javax.swing.JMenuItem();
-        Exit = new javax.swing.JMenuItem();
+        exit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -298,29 +293,10 @@ public class Main extends javax.swing.JFrame{
         });
 
         directoryField.setForeground(new java.awt.Color(204, 204, 204));
-        directoryField.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                directoryFieldComponentAdded(evt);
-            }
-        });
-        directoryField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                directoryFieldFocusGained(evt);
-            }
-        });
-        directoryField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                directoryFieldMouseClicked(evt);
-            }
-        });
+        directoryField.setText("C:\\User\\PDFstobesplit");
         directoryField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 directoryFieldActionPerformed(evt);
-            }
-        });
-        directoryField.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                directoryFieldPropertyChange(evt);
             }
         });
 
@@ -421,6 +397,13 @@ public class Main extends javax.swing.JFrame{
         progressListing.setDragEnabled(false);
         jScrollPane1.setViewportView(progressListing);
 
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
         edit.setText("Edit");
 
         copyItem.setText("Copy");
@@ -433,8 +416,14 @@ public class Main extends javax.swing.JFrame{
         cut.setText("Cut");
         edit.add(cut);
 
-        Exit.setText("jMenuItem1");
-        edit.add(Exit);
+        exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        exit.setText("Quit");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
+        edit.add(exit);
 
         menuBar.add(edit);
 
@@ -463,6 +452,8 @@ public class Main extends javax.swing.JFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(evenPages)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cancelButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(exitButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(okButton))
@@ -517,24 +508,57 @@ public class Main extends javax.swing.JFrame{
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(exitButton)
-                            .addComponent(okButton))))
+                            .addComponent(okButton)
+                            .addComponent(cancelButton))))
                 .addGap(18, 18, 18))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitActionPerformed
+
+    private void copiesCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copiesCheckActionPerformed
+        // TODO add your handling code here:
+        if (copiesCheck.isSelected()) {
+            copyCheck = true;
+            System.out.println(copyCheck);
+        } else {
+            copyCheck = false;
+            System.out.println(copyCheck);
+        }
+    }//GEN-LAST:event_copiesCheckActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        PdfSplit cancel = new PdfSplit();
+        for (String path : cancel.cancel()) {
+            deleteFilesPath.resolve(path);
+            try {
+                Files.deleteIfExists(deleteFilesPath);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+                
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_okButtonActionPerformed
         PdfSplit okSplit = new PdfSplit();
         try {
             String path = directoryField.getText();
             okSplit.pdfSplit(path);
-                } catch (IOException ex) {
-                } catch (DocumentException ex) {
-                
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        } catch (IOException ex) {
+        } catch (DocumentException | InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }// GEN-LAST:event_okButtonActionPerformed
+
     private void supplierCheckActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_supplierCheckActionPerformed
         // Radio button to utilize a rename function for specific organization needs.
         if (supplierCheck.isSelected()) {
@@ -544,11 +568,12 @@ public class Main extends javax.swing.JFrame{
             supplierDoc = false;
             System.out.println(supplierDoc);
         }
-        
+
     }// GEN-LAST:event_supplierCheckActionPerformed
-         public String output(String output){
-            System.out.println(output);
-             return output;
-        }   
-        
+
+    public String output(String output) {
+        System.out.println(output);
+        return output;
+    }
+
 }

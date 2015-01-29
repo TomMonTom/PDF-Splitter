@@ -89,6 +89,7 @@ public int barUpdate=0;
                     e.printStackTrace();
                 }
             }
+    
     public String getdatacounter(){
     return newFileListing;
 }
