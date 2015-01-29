@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -22,7 +23,7 @@ import java.nio.file.Path;
 public class PdfSplit extends Main {
     public Path deleteFilesPath;
     public String newFileListing;
-    public float barUpdate;
+    public int barUpdate;
     public String[] deleteFile= new String[50];
 
     public void pdfSplit(String path) throws IOException, DocumentException, InterruptedException {
@@ -57,13 +58,8 @@ public class PdfSplit extends Main {
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-
                 deleteFile[k] =path + "/" + FileName + "(" + j + 1 + ")" + ".pdf";
                 k++;
-                barUpdate += ((j + 1) / numPages) * 100;
-                if (numPages == j) {
-                    barUpdate = 100;
-                }
                 if (j == 1) {
                     newFileListing = ("Created File:" + path + FileName + "(" + j + ")" + ".pdf" + "\n");
                 } else if (j > 1) {
@@ -75,8 +71,6 @@ public class PdfSplit extends Main {
             System.out.println("Number of Documents Created:" + numPages);
             pdfFileReader.close();
         }
-        Thread.sleep(50);
-        barUpdate = 0;
     }
 
     public void pdfSplitCopy(String path) throws IOException, DocumentException {
@@ -117,11 +111,6 @@ public class PdfSplit extends Main {
                 k++;
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, constant)); /* Import pages from original document */
-
-                barUpdate += ((j + 1) / numPages) * 10;
-                if (numPages == j) {
-                    barUpdate = 100;
-                }
                 if (j == 1) {
                     newFileListing = ("Created File:" + path + FileName + "(" + j + ")" + ".pdf" + "\n");
                 } else if (j > 1) {
@@ -227,13 +216,8 @@ public class PdfSplit extends Main {
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-
                 deleteFile[k] = path + "/" + FileName + "(" + j + 1 + ")" + ".pdf";
                 k++;
-                barUpdate += ((j) / numPages) * 100;
-                if (numPages == j) {
-                    barUpdate = 100;
-                }
                 if (j == 1) {
                     newFileListing = ("Created File:" + path + FileName + "(" + j + ")" + ".pdf" + "\n");
                 } else if (j > 1) {
@@ -282,11 +266,6 @@ public class PdfSplit extends Main {
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + 1 + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, constant)); /* Import pages from original document */
-
-                barUpdate += ((j + 1) / numPages) * 100;
-                if (numPages == j) {
-                    barUpdate = 100;
-                }
                 if (j == 1) {
                     newFileListing = ("Created File:" + path + FileName + "(" + j + ")" + ".pdf" + "\n");
                 } else if (j > 1) {

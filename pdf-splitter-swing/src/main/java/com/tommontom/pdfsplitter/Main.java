@@ -16,8 +16,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.text.DefaultEditorKit;
 import com.itextpdf.text.DocumentException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -124,7 +123,7 @@ public class Main extends javax.swing.JFrame {
         for (int i = 0; i < files.length; i++) {
             try {
                 combiner.pdfMerge(files);
-            } catch (DocumentException ex) {
+            } catch (DocumentException | InterruptedException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -153,12 +152,7 @@ public class Main extends javax.swing.JFrame {
         return menuBar;
     }
 
-    private void directoryFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_directoryFieldActionPerformed
-        if (directoryField.getText().equals(example)) {
-            directoryField.setText("");
-            directoryField.setForeground(Color.BLACK);
-        }
-    }// GEN-LAST:event_directoryFieldActionPerformed
+
 
     private void dragAndDropComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropComponentAdded
         // Code used for the drag and drop portion of the combine function
@@ -171,12 +165,11 @@ public class Main extends javax.swing.JFrame {
                     PdfMerge merger = new PdfMerge();
                     // uses the pdfMerge method that passes down a file string.
                     merger.pdfMerge(files);
-                    progressListing.insert(merger.getdatacounter(), 0);
-                    for (int i = 0; i < files.length; i++) {
-                        progressBar.setValue(merger.getvalue());
-                    }
+                    progressListing.insert(merger.getdatacounter(), 0);                  
 
                 } catch (DocumentException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -193,22 +186,14 @@ public class Main extends javax.swing.JFrame {
                 try {
                     if (copyCheck == true && supplierDoc == false) {
                         dropSplit.pdfSplitDropCopy(files);
-                        for (int i = 0; i < files.length; i++) {
-                            progressBar.setValue(dropSplit.getvalue());
-                        }
+
                         progressListing.insert(dropSplit.getdatacounter(), 0);
                     } else if (copyCheck == false && supplierDoc == false) {
                         dropSplit.pdfSplitDrop(files);
-                        for (int i = 0; i < files.length; i++) {
-                            progressBar.setValue(dropSplit.getvalue());
-                        }
                         progressListing.insert(dropSplit.getdatacounter(), 0);
                     }
                     if (supplierDoc == true && copyCheck == false) {
                         dropSplit.pdfSplitDropSupplierDoc(files);
-                        for (int i = 0; i < files.length; i++) {
-                            progressBar.setValue(dropSplit.getvalue());
-                        }
                         progressListing.insert(dropSplit.getdatacounter(), 0);
                     }
                 } catch (IOException | DocumentException | InterruptedException ex) {
@@ -301,6 +286,11 @@ public class Main extends javax.swing.JFrame {
 
         directoryField.setForeground(new java.awt.Color(204, 204, 204));
         directoryField.setText("C:\\User\\PDFstobesplit");
+        directoryField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                directoryFieldMouseClicked(evt);
+            }
+        });
         directoryField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 directoryFieldActionPerformed(evt);
@@ -477,7 +467,7 @@ public class Main extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -551,13 +541,29 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryFieldMouseClicked
+        // TODO add your handling code here:
+        if (directoryField.getText().equals(example)) {
+            directoryField.setText("");
+            directoryField.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_directoryFieldMouseClicked
+
+    private void directoryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_directoryFieldActionPerformed
+        // TODO add your handling code here:
+            if (directoryField.getText().equals(example)) {
+            directoryField.setText("");
+            directoryField.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_directoryFieldActionPerformed
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_okButtonActionPerformed
         PdfSplit okSplit = new PdfSplit();
         try {
             String path = directoryField.getText();
             if (copyCheck == true && supplierDoc == false) {
                 okSplit.pdfSplitCopy(path);
-                progressBar.setValue(okSplit.getvalue());
+                progressBar.setValue(okSplit.barUpdate);
                 progressListing.insert(okSplit.getdatacounter(), 0);
             } else if (copyCheck == false && supplierDoc == false) {
                 okSplit.pdfSplit(path);

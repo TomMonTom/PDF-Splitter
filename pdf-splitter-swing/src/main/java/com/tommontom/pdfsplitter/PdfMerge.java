@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 public class PdfMerge extends Main{
 public String newFileListing;
-public int barUpdate=0;
+public int barUpdate;
       public static void doMerge(java.util.List<InputStream> list, OutputStream outputStream)
             throws DocumentException, IOException {
         Document document = new Document();
@@ -52,7 +52,7 @@ public int barUpdate=0;
         document.close();
         outputStream.close();
     }
-    public void pdfMerge(File[] files) throws DocumentException {
+    public void pdfMerge(File[] files) throws DocumentException, InterruptedException {
                 File newFiles = files[0];   //Takes the name of the first file within the list in the explorer and uses that file name as a base name
                 String DEFAULT_PATH = newFiles.getParent();
                 //if the directoryfield contains text, then use that field as the save path for combining pdfs.
@@ -63,22 +63,21 @@ public int barUpdate=0;
                 for (int i =0; i<listOfFiles.length; i++){
                 System.out.println(listOfFiles[i]);
                 }
-                int i;
+                float j=0;
                 try {
                     //add the file info to a list with the path and filename in place. then output the information to the doMerge method.
-                    for ( i = 0; i < listOfFiles.length; i++) {
+                    for (int i = 0; i < listOfFiles.length; i++) {
                         list.add(new FileInputStream(new File(DEFAULT_PATH + "/" + listOfFiles[i].getName())));
                         if(i==0){
                             newFileListing=("Files Merged:"+DEFAULT_PATH + "/" + listOfFiles[i].getName()+"\n");
                         }if (i>0){
                             newFileListing+=("Files Merged:"+DEFAULT_PATH + "/" + listOfFiles[i].getName()+"\n");
                         }
-                        barUpdate+=((i+1)/listOfFiles.length)*100;
+                        barUpdate=(int) (((j/listOfFiles.length)*100));
+                        j++;
                         System.out.println(barUpdate);
-                        if (listOfFiles.length==i){
-                            barUpdate=100;
-                        }
                     }
+                    
                     OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "/" + listOfFiles[0].getName()+".pdf"));
                     newFileListing+=("File Made:"+DEFAULT_PATH + "/" + listOfFiles[0].getName()+".pdf"+"\n");
                     doMerge(list, out);
@@ -93,7 +92,4 @@ public int barUpdate=0;
     public String getdatacounter(){
     return newFileListing;
 }
-    public int getvalue(){
-        return barUpdate;
-    }
 }
