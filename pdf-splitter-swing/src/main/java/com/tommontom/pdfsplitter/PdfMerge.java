@@ -73,7 +73,7 @@ public int barUpdate=0;
                         }if (i>0){
                             newFileListing+=("Files Merged:"+DEFAULT_PATH + "/" + listOfFiles[i].getName()+"\n");
                         }
-                        barUpdate+=(i+1/listOfFiles.length)*10;
+                        barUpdate+=((i+1)/listOfFiles.length)*100;
                         System.out.println(barUpdate);
                         if (listOfFiles.length==i){
                             barUpdate=100;

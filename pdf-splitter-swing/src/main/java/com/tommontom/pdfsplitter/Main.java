@@ -66,7 +66,6 @@ public class Main extends javax.swing.JFrame {
     public boolean copyCheck;
     public boolean supplierDoc;
     String example = "C:\\User\\PDFstobesplit";
-    public Path deleteFilesPath;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBrowse;
@@ -161,12 +160,6 @@ public class Main extends javax.swing.JFrame {
         }
     }// GEN-LAST:event_directoryFieldActionPerformed
 
-    private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_directoryFieldMouseClicked
-        // TODO add your handling code here:
-
-
-    }// GEN-LAST:event_directoryFieldMouseClicked
-
     private void dragAndDropComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropComponentAdded
         // Code used for the drag and drop portion of the combine function
 
@@ -198,13 +191,27 @@ public class Main extends javax.swing.JFrame {
                 progressListing.setText("");
                 PdfSplit dropSplit = new PdfSplit();
                 try {
-                    dropSplit.pdfSplitDrop(files);
-                    progressListing.insert(dropSplit.getdatacounter(), 0);
-                } catch (IOException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (DocumentException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
+                    if (copyCheck == true && supplierDoc == false) {
+                        dropSplit.pdfSplitDropCopy(files);
+                        for (int i = 0; i < files.length; i++) {
+                            progressBar.setValue(dropSplit.getvalue());
+                        }
+                        progressListing.insert(dropSplit.getdatacounter(), 0);
+                    } else if (copyCheck == false && supplierDoc == false) {
+                        dropSplit.pdfSplitDrop(files);
+                        for (int i = 0; i < files.length; i++) {
+                            progressBar.setValue(dropSplit.getvalue());
+                        }
+                        progressListing.insert(dropSplit.getdatacounter(), 0);
+                    }
+                    if (supplierDoc == true && copyCheck == false) {
+                        dropSplit.pdfSplitDropSupplierDoc(files);
+                        for (int i = 0; i < files.length; i++) {
+                            progressBar.setValue(dropSplit.getvalue());
+                        }
+                        progressListing.insert(dropSplit.getdatacounter(), 0);
+                    }
+                } catch (IOException | DocumentException | InterruptedException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -535,24 +542,41 @@ public class Main extends javax.swing.JFrame {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
         PdfSplit cancel = new PdfSplit();
-        for (String path : cancel.cancel()) {
-            deleteFilesPath.resolve(path);
-            try {
-                Files.deleteIfExists(deleteFilesPath);
-            } catch (IOException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            cancel.cancel();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-                
+
+
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_okButtonActionPerformed
         PdfSplit okSplit = new PdfSplit();
         try {
             String path = directoryField.getText();
-            okSplit.pdfSplit(path);
+            if (copyCheck == true && supplierDoc == false) {
+                okSplit.pdfSplitCopy(path);
+                progressBar.setValue(okSplit.getvalue());
+                progressListing.insert(okSplit.getdatacounter(), 0);
+            } else if (copyCheck == false && supplierDoc == false) {
+                okSplit.pdfSplit(path);
+                progressListing.insert(okSplit.getdatacounter(), 0);
+            }
+            if (supplierDoc == true && copyCheck == false) {
+                okSplit.pdfSplitSupplierDoc(path);
+                progressBar.setValue(okSplit.getvalue());
+                progressListing.insert(okSplit.getdatacounter(), 0);
+            } else if (supplierDoc == false && copyCheck == false) {
+                okSplit.pdfSplit(path);
+                progressBar.setValue(okSplit.getvalue());
+                progressListing.insert(okSplit.getdatacounter(), 0);
+            } else {
+                okSplit.pdfSplit(path);
+                progressBar.setValue(okSplit.getvalue());
+                progressListing.insert(okSplit.getdatacounter(), 0);
+            }
+
         } catch (IOException ex) {
         } catch (DocumentException | InterruptedException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -570,10 +594,5 @@ public class Main extends javax.swing.JFrame {
         }
 
     }// GEN-LAST:event_supplierCheckActionPerformed
-
-    public String output(String output) {
-        System.out.println(output);
-        return output;
-    }
 
 }

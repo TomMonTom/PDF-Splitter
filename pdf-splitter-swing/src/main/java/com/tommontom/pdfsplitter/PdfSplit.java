@@ -12,17 +12,18 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  *
  * @author tthompson
  */
 public class PdfSplit extends Main {
-
+    public Path deleteFilesPath;
     public String newFileListing;
     public float barUpdate;
-    public String[] deleteFile;
-    
+    public String[] deleteFile= new String[50];
 
     public void pdfSplit(String path) throws IOException, DocumentException, InterruptedException {
         // TODO Instead of hard code path, pass in as argument
@@ -57,7 +58,7 @@ public class PdfSplit extends Main {
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
 
-                deleteFile[k] = (path + "/" + FileName + "(" + j + 1 + ")" + ".pdf");
+                deleteFile[k] =path + "/" + FileName + "(" + j + 1 + ")" + ".pdf";
                 k++;
                 barUpdate += ((j + 1) / numPages) * 100;
                 if (numPages == j) {
@@ -99,7 +100,7 @@ public class PdfSplit extends Main {
             int fileNameNumOne = Integer.getInteger(fileNameNum[0]);
             int fileNameNumTwo = Integer.getInteger(fileNameNum[1]);
             int constant = 1;
-            int k=0;
+            int k = 0;
             int numPages = fileNameNumTwo - fileNameNumOne;
             // Split on a space '\s'
             // Determine number of pages by difference of lot numbers
@@ -112,10 +113,11 @@ public class PdfSplit extends Main {
 
                 document = new Document();
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + 1 + ")" + ".pdf"));
-                deleteFile [k]= (path + "/" + FileName + "(" + j + 1 + ")" + ".pdf");
+                deleteFile[k] = (path + "/" + FileName + "(" + j + 1 + ")" + ".pdf");
                 k++;
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, constant)); /* Import pages from original document */
+
                 barUpdate += ((j + 1) / numPages) * 10;
                 if (numPages == j) {
                     barUpdate = 100;
@@ -216,9 +218,9 @@ public class PdfSplit extends Main {
             // Read in the source document
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
-
+            int k = 0;
             document.open();
-            for (int j = 1; j < numPages + 1; j++) {
+            for (int j = 1; j < numPages; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
 
                 document = new Document();
@@ -226,7 +228,9 @@ public class PdfSplit extends Main {
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
 
-                barUpdate += ((j + 1) / numPages) * 100;
+                deleteFile[k] = path + "/" + FileName + "(" + j + 1 + ")" + ".pdf";
+                k++;
+                barUpdate += ((j) / numPages) * 100;
                 if (numPages == j) {
                     barUpdate = 100;
                 }
@@ -239,8 +243,6 @@ public class PdfSplit extends Main {
             }
             pdfFileReader.close();
         }
-        Thread.sleep(50);
-        barUpdate = 0;
     }
 
     public void pdfSplitDropCopy(File[] files) throws IOException, DocumentException {
@@ -298,9 +300,9 @@ public class PdfSplit extends Main {
 
     public void pdfSplitDropSupplierDoc(File[] files) throws IOException, DocumentException {
         // TODO Instead of hard code path, pass in as argument
-        
+
         String path;
-                if (directoryField.getText().isEmpty() || directoryField.getText().equals(example)) {
+        if (directoryField.getText().isEmpty() || directoryField.getText().equals(example)) {
             path = files[0].getParent();
         } else {
             path = directoryField.getText();
@@ -455,7 +457,10 @@ public class PdfSplit extends Main {
         return (int) barUpdate;
     }
 
-    public String[] cancel() {
-        return deleteFile;
+    public void cancel() throws IOException {
+        for (int i=0;i<deleteFile.length;i++) {
+            deleteFilesPath.resolve(deleteFile[i]);
+            Files.delete(deleteFilesPath);
     }
+}
 }
