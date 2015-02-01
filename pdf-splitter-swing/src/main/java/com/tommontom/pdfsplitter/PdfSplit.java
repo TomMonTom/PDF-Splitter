@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.SwingWorker;
 
 /**
@@ -24,8 +25,7 @@ public class PdfSplit extends Main {
     public Path deleteFilesPath;
     public String newFileListing;
     public int barUpdate;
-    public String[] deleteFile= new String[50];
-
+    String[] deleteFile = new String[100];
     public void pdfSplit(String path) throws IOException, DocumentException, InterruptedException {
         // TODO Instead of hard code path, pass in as argument
         File folder = new File(path);
@@ -53,7 +53,6 @@ public class PdfSplit extends Main {
             document.open();
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
-
                 document = new Document();
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
@@ -216,7 +215,7 @@ public class PdfSplit extends Main {
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-                deleteFile[k] = path + "/" + FileName + "(" + j + 1 + ")" + ".pdf";
+                deleteFile[k] += path + "/" + FileName + "(" + j + ")" + ".pdf";
                 k++;
                 if (j == 1) {
                     newFileListing = ("Created File:" + path + FileName + "(" + j + ")" + ".pdf" + "\n");
@@ -438,8 +437,12 @@ public class PdfSplit extends Main {
 
     public void cancel() throws IOException {
         for (int i=0;i<deleteFile.length;i++) {
-            deleteFilesPath.resolve(deleteFile[i]);
-            Files.delete(deleteFilesPath);
+            if (deleteFile[i]!=null){
+              Path path = Paths.get(deleteFile[i]);
+            Files.delete(path);  
+            }
+            
     }
 }
+    
 }

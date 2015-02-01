@@ -16,14 +16,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.text.DefaultEditorKit;
 import com.itextpdf.text.DocumentException;
-import javafx.concurrent.Task;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  *
  * @author Thomas Thompson, Jeffery Jenkins
  * @version 0.0.1
  */
-public class Main extends javax.swing.JFrame {
+public class Main extends javax.swing.JFrame implements ActionListener, 
+                                        PropertyChangeListener{
 
     /**
      * @param args the command line arguments
@@ -121,11 +125,7 @@ public class Main extends javax.swing.JFrame {
         FileNameFilter FileFilter = new FileNameFilter();
         File[] files = folder.listFiles(FileFilter);
         for (int i = 0; i < files.length; i++) {
-            try {
-                combiner.pdfMerge(files);
-            } catch (DocumentException | InterruptedException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            combiner.pdfMerge(files);
         }
 
     }// GEN-LAST:event_combineActionPerformed
@@ -161,17 +161,9 @@ public class Main extends javax.swing.JFrame {
             // initializes a drag and drop interface to then use an object
             @Override
             public void filesDropped(File[] files) {
-                try {
-                    PdfMerge merger = new PdfMerge();
-                    // uses the pdfMerge method that passes down a file string.
-                    merger.pdfMerge(files);
-                    progressListing.insert(merger.getdatacounter(), 0);                  
-
-                } catch (DocumentException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                PdfMerge merger = new PdfMerge();
+                merger.pdfMerge(files);
+                progressListing.insert(merger.getdatacounter(), 0);
             }
 
         });
@@ -406,6 +398,7 @@ public class Main extends javax.swing.JFrame {
         copyItem.setText("Copy");
         edit.add(copyItem);
 
+        paste.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
         paste.setText("Paste");
         paste.setToolTipText("");
         edit.add(paste);
@@ -600,5 +593,15 @@ public class Main extends javax.swing.JFrame {
         }
 
     }// GEN-LAST:event_supplierCheckActionPerformed
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
