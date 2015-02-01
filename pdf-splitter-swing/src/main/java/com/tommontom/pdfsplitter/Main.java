@@ -123,7 +123,7 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         PdfMerge combiner = new PdfMerge();
         File folder = new File(directoryField.getText());
         FileNameFilter FileFilter = new FileNameFilter();
-        File[] files = folder.listFiles(FileFilter);
+        File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             combiner.pdfMerge(files);
         }
@@ -164,6 +164,7 @@ public class Main extends javax.swing.JFrame implements ActionListener,
                 PdfMerge merger = new PdfMerge();
                 merger.pdfMerge(files);
                 progressListing.insert(merger.getdatacounter(), 0);
+
             }
 
         });
@@ -363,7 +364,7 @@ public class Main extends javax.swing.JFrame implements ActionListener,
             .addGroup(dragAndDropSplitLayout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addComponent(jLabel1)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         dragAndDropSplitLayout.setVerticalGroup(
             dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -395,6 +396,7 @@ public class Main extends javax.swing.JFrame implements ActionListener,
 
         edit.setText("Edit");
 
+        copyItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         copyItem.setText("Copy");
         edit.add(copyItem);
 
@@ -403,6 +405,7 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         paste.setToolTipText("");
         edit.add(paste);
 
+        cut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         cut.setText("Cut");
         edit.add(cut);
 
@@ -454,13 +457,13 @@ public class Main extends javax.swing.JFrame implements ActionListener,
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(supplierCheck))
                             .addComponent(titleLabel)
-                            .addComponent(instructions)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(dragAndDropSplit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(instructions))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

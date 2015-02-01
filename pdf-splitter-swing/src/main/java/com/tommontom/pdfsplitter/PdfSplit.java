@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import java.nio.file.Files;
@@ -41,7 +42,7 @@ public class PdfSplit extends Main {
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
             PdfReader pdfFileReader = new PdfReader(file.getPath());
-            Document document = new Document(); /* instantiates a new document to be made */
+            Document document = new Document(PageSize.LETTER,0,0,0,0); /* instantiates a new document to be made */
 
             int k = 0;
             int numPages = pdfFileReader.getNumberOfPages();
@@ -53,7 +54,7 @@ public class PdfSplit extends Main {
             document.open();
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
-                document = new Document();
+                document = new Document(PageSize.LETTER,0,0,0,0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
@@ -87,7 +88,7 @@ public class PdfSplit extends Main {
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
             PdfReader pdfFileReader = new PdfReader(file.getPath());
-            Document document = new Document(); /* instantiates a new document to be made */
+            Document document = new Document(PageSize.LETTER,0,0,0,0); /* instantiates a new document to be made */
 
             String[] fileNameNum = fileNameWithoutExt.split("-");
             int fileNameNumOne = Integer.getInteger(fileNameNum[0]);
@@ -104,7 +105,7 @@ public class PdfSplit extends Main {
             for (int j = 0; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
 
-                document = new Document();
+                document = new Document(PageSize.LETTER,0,0,0,0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + 1 + ")" + ".pdf"));
                 deleteFile[k] = (path + "/" + FileName + "(" + j + 1 + ")" + ".pdf");
                 k++;
@@ -139,7 +140,7 @@ public class PdfSplit extends Main {
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
             PdfReader pdfFileReader = new PdfReader(file.getPath());
-            Document document = new Document(); /* instantiates a new document to be made */
+            Document document = new Document(PageSize.LETTER,0,0,0,0); /* instantiates a new document to be made */
 
             // Split on a space '\s'
 
@@ -169,7 +170,7 @@ public class PdfSplit extends Main {
                 String FileName = projectNum + "-" + (firstLotNum) + ".pdf"; /* Dynamic file name */
 
                 firstLotNum++;
-                document = new Document();
+                document = new Document(PageSize.LETTER,0,0,0,0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
@@ -199,7 +200,7 @@ public class PdfSplit extends Main {
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
             PdfReader pdfFileReader = new PdfReader(file.getPath());
-            Document document = new Document(); /* instantiates a new document to be made */
+            Document document = new Document(PageSize.LETTER,0,0,0,0); /* instantiates a new document to be made */
 
             int numPages = pdfFileReader.getNumberOfPages();
             // Determine number of pages by difference of lot numbers
@@ -211,7 +212,7 @@ public class PdfSplit extends Main {
             for (int j = 1; j < numPages; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
 
-                document = new Document();
+                document = new Document(PageSize.LETTER,0,0,0,0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
@@ -260,8 +261,7 @@ public class PdfSplit extends Main {
             // Create a copy of the orignal source file. We will pick specific pages out below
             for (int j = 0; j < numPages + 1; j++) {
                 String FileName = (fileNameWithoutExt); /* Dynamic file name */
-
-                document = new Document();
+                document = new Document(PageSize.LETTER,0,0,0,0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName + "(" + j + 1 + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, constant)); /* Import pages from original document */
@@ -296,7 +296,7 @@ public class PdfSplit extends Main {
             String fileName = file.getName();
             String fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
             PdfReader pdfFileReader = new PdfReader(file.getPath());
-            Document document = new Document(); /* instantiates a new document to be made */
+            Document document = new Document(PageSize.LETTER,0,0,0,0); /* instantiates a new document to be made */
 
             int numPages = pdfFileReader.getNumberOfPages();
             // Determine number of pages by difference of lot numbers
@@ -329,7 +329,7 @@ public class PdfSplit extends Main {
                 String FileName = projectNum + "-" + (firstLotNum) + ".pdf"; /* Dynamic file name */
 
                 firstLotNum++;
-                document = new Document();
+                document = new Document(PageSize.LETTER,0,0,0,0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "/" + FileName));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
@@ -392,7 +392,7 @@ public class PdfSplit extends Main {
             if (pdfFileReader.equals(mod)) {
                 throw new RuntimeException("File is not an even number of pages");
             }
-            Document document = new Document(); /* instantiates a new document to be made */
+            Document document = new Document(PageSize.LETTER,0,0,0,0); /* instantiates a new document to be made */
 
             int numPages = secondLotNum - firstLotNum + 1;
             int p = 0;
@@ -407,7 +407,7 @@ public class PdfSplit extends Main {
                 firstLotNum++;
                 String FileName = projectNum + "-" + (firstLotNum - 1) + ".pdf"; /* Dynamic file name */
 
-                document = new Document();
+                document = new Document(PageSize.LETTER,0,0,0,0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(DEFAULT_PATH + "//" + FileName));
                 if (j == 1) {
                     newFileListing = ("Created File:" + DEFAULT_PATH + "//" + FileName + "\n");
