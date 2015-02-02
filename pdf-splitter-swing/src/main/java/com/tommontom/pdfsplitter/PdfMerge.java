@@ -23,6 +23,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
@@ -40,7 +41,7 @@ public class PdfMerge extends Main {
 
     public static void doMerge(java.util.List<InputStream> list, String[] imageList, OutputStream outputStream)
             throws DocumentException, IOException {
-        Document document = new Document(PageSize.LETTER,0,0,0,0);
+        Document document = new Document(PageSize.LETTER, 0, 0, 0, 0);
         PdfWriter writer = PdfWriter.getInstance(document, outputStream);
         writer.setFullCompression();
         document.open();
@@ -49,7 +50,9 @@ public class PdfMerge extends Main {
         for (InputStream in : list) {
             PdfReader reader = new PdfReader(in);
             for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+
                 document.newPage();
+
                 //import the page from source pdf
                 PdfImportedPage page = writer.getImportedPage(reader, i);
                 //add the page to the destination pdf
@@ -61,8 +64,10 @@ public class PdfMerge extends Main {
             document.newPage();
             if (imageList[i] != null) {
                 img = Image.getInstance(String.format("%s", imageList[i]));
-                if (img.getScaledWidth()>img.getScaledHeight()){
-                 img.rotate();
+                Rectangle one = new Rectangle(img.getPlainWidth(), img.getPlainHeight());
+                document.setPageSize(one);
+                if (img.getScaledWidth() > img.getScaledHeight()) {
+                    img.rotate();
                 }
                 if (img.getScaledWidth() > 792 || img.getScaledHeight() > 792) {
                     img.scaleToFit(792, 792);
@@ -71,7 +76,6 @@ public class PdfMerge extends Main {
                 img.setDpi(150, 150);
                 document.add(img);
             }
-
         }
 
         outputStream.flush();
@@ -86,6 +90,7 @@ public class PdfMerge extends Main {
         System.out.println(DEFAULT_PATH);
         List<java.io.InputStream> list = new ArrayList<>();
         File[] listOfFiles = files; /* Stores the listing of the files */
+
         String[] listImages = new String[listOfFiles.length];
         Arrays.sort(listOfFiles); // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
         for (int j = 0; j < listOfFiles.length; j++) {

@@ -25,7 +25,7 @@ public class PdfSplit extends Main {
     public Path deleteFilesPath;
     public String newFileListing;
     public int barUpdate;
-    String[] deleteFile = new String[100];
+    public String[] deleteFile = new String[1000];
     public void pdfSplit(String path) throws IOException, DocumentException, InterruptedException {
         // TODO Instead of hard code path, pass in as argument
         File folder = new File(path);
