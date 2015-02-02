@@ -16,7 +16,6 @@ import com.itextpdf.text.pdf.PdfReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javax.swing.SwingWorker;
 
 /**
  *
@@ -435,14 +434,9 @@ public class PdfSplit extends Main {
         return (int) barUpdate;
     }
 
-    public void cancel() throws IOException {
-        for (int i=0;i<deleteFile.length;i++) {
-            if (deleteFile[i]!=null){
-              Path path = Paths.get(deleteFile[i]);
-            Files.delete(path);  
-            }
-            
-    }
+    public String [] cancel() throws IOException {
+            return deleteFile;
+        }
 }
     
-}
+

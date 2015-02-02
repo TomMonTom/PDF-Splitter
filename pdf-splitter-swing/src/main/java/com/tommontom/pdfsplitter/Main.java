@@ -20,6 +20,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -319,15 +322,15 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         dragAndDrop.setLayout(dragAndDropLayout);
         dragAndDropLayout.setHorizontalGroup(
             dragAndDropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dragAndDropLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dragAndDropLayout.createSequentialGroup()
+                .addContainerGap(61, Short.MAX_VALUE)
                 .addComponent(dropLabel)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGap(58, 58, 58))
         );
         dragAndDropLayout.setVerticalGroup(
             dragAndDropLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dragAndDropLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(50, 50, 50)
                 .addComponent(dropLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -361,17 +364,17 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         dragAndDropSplit.setLayout(dragAndDropSplitLayout);
         dragAndDropSplitLayout.setHorizontalGroup(
             dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dragAndDropSplitLayout.createSequentialGroup()
-                .addGap(44, 44, 44)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dragAndDropSplitLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(64, 64, 64))
         );
         dragAndDropSplitLayout.setVerticalGroup(
             dragAndDropSplitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dragAndDropSplitLayout.createSequentialGroup()
-                .addGap(54, 54, 54)
+                .addGap(52, 52, 52)
                 .addComponent(jLabel1)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         copiesCheck.setText("Create Copies");
@@ -384,7 +387,6 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         progressListing.setEditable(false);
         progressListing.setColumns(20);
         progressListing.setRows(5);
-        progressListing.setDragEnabled(false);
         jScrollPane1.setViewportView(progressListing);
 
         cancelButton.setText("Cancel");
@@ -437,9 +439,6 @@ public class Main extends javax.swing.JFrame implements ActionListener,
                         .addComponent(directoryField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonBrowse))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(combine)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -460,8 +459,11 @@ public class Main extends javax.swing.JFrame implements ActionListener,
                             .addComponent(instructions))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -529,7 +531,12 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         // TODO add your handling code here:
         PdfSplit cancel = new PdfSplit();
         try {
-            cancel.cancel();
+            for (String deleteFile1 : cancel.cancel()) {
+            if (deleteFile1 != null) {
+                Path path = Paths.get(deleteFile1);
+                Files.delete(path);
+            }
+            }
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
