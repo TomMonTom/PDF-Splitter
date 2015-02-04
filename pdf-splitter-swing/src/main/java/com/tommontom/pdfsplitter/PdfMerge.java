@@ -5,6 +5,11 @@
  */
 package com.tommontom.pdfsplitter;
 
+import com.artofsolving.jodconverter.DocumentConverter;
+import com.artofsolving.jodconverter.DocumentFormat;
+import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
+import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
+import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
 import java.lang.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,14 +26,15 @@ import java.util.List;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -39,7 +45,7 @@ public class PdfMerge extends Main {
     public String newFileListing;
     public int barUpdate;
 
-    public static void doMerge(java.util.List<InputStream> list, String[] imageList, OutputStream outputStream)
+    public static void doMerge(java.util.List<InputStream> list, String[] imageList, String[] listWordExcels, OutputStream outputStream)
             throws DocumentException, IOException {
         Document document = new Document(PageSize.LETTER, 0, 0, 0, 0);
         PdfWriter writer = PdfWriter.getInstance(document, outputStream);
@@ -52,7 +58,6 @@ public class PdfMerge extends Main {
             for (int i = 1; i <= reader.getNumberOfPages(); i++) {
 
                 document.newPage();
-
                 //import the page from source pdf
                 PdfImportedPage page = writer.getImportedPage(reader, i);
                 //add the page to the destination pdf
@@ -77,6 +82,20 @@ public class PdfMerge extends Main {
                 document.add(img);
             }
         }
+        for (int i = 0; i < listWordExcels.length; i++) {
+            if (imageList[i] != null) {
+                File input = new File(listWordExcels[i]);
+                File output = new File(listWordExcels[i]+".pdf");
+                String outputS = listWordExcels[i]+".pdf";
+                OpenOfficeConnection connection = new SocketOpenOfficeConnection(8100);
+                connection.connect();
+                DocumentConverter converter = new OpenOfficeDocumentConverter(connection);
+                converter.convert(input, output);
+                PdfReader readerWord = new PdfReader(outputS);
+                PdfImportedPage page = writer.getImportedPage(readerWord, readerWord.getNumberOfPages());
+                cb.addTemplate(page, 0,0);
+            }
+        }
 
         outputStream.flush();
         document.close();
@@ -90,8 +109,8 @@ public class PdfMerge extends Main {
         System.out.println(DEFAULT_PATH);
         List<java.io.InputStream> list = new ArrayList<>();
         File[] listOfFiles = files; /* Stores the listing of the files */
-
         String[] listImages = new String[listOfFiles.length];
+        String[] listWordExcels = new String[listOfFiles.length];
         Arrays.sort(listOfFiles); // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
         for (int j = 0; j < listOfFiles.length; j++) {
             System.out.println(listOfFiles[j].getName());
@@ -121,6 +140,9 @@ public class PdfMerge extends Main {
                     listImages[i] = f.getPath();
 
                 }
+                if (f.getName().toLowerCase().endsWith(".doc")) {
+                    listWordExcels[i] = f.getPath();
+                }
 
                 if (listOfFiles.length > 0) {
                     newFileListing += ("Files Merged:" + DEFAULT_PATH + "\\" + f + "\n");
@@ -134,7 +156,8 @@ public class PdfMerge extends Main {
             }
             OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[0].getName() + ".pdf"));
             newFileListing += ("File Made:" + DEFAULT_PATH + "\\" + listOfFiles[0].getName() + ".pdf" + "\n");
-            doMerge(list, listImages, out);
+            System.out.println(out);
+            doMerge(list, listImages, listWordExcels, out);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PdfMerge.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException | IOException ex) {

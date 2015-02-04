@@ -215,8 +215,7 @@ public class PdfSplit extends Main {
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName + "(" + j + ")" + ".pdf"));
                 document.open();
                 copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
-
-                deleteFile[k] = path + "\\" + FileName + "(" + j + ")" + ".pdf";
+                deleteFile[k] += path + "\\" + FileName + "(" + j + ")" + ".pdf";
                 k++;
                 if (j == 1) {
                     newFileListing = ("Created File:" + path + FileName + "(" + j + ")" + ".pdf" + "\n");
@@ -295,17 +294,12 @@ public class PdfSplit extends Main {
             System.out.println(fileNameWithoutExt);
             PdfReader pdfFileReader = new PdfReader(file.getPath());
             Document document = new Document(PageSize.LETTER, 0, 0, 0, 0); /* instantiates a new document to be made */
-
-
             // Determine number of pages by difference of lot numbers
             // Read in the source document
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
             // Split on a space '\s'
             String[] fileNames = fileNameWithoutExt.split("-");
-            /*
-             * if (fileNames.length != 2) { throw new RuntimeException("File name format is not in right format"); }
-             */
 
             String fileNameFirst = fileNames[1];
             String fileNameSecond = fileNames[2];
@@ -326,7 +320,6 @@ public class PdfSplit extends Main {
             document.open();
             for (int j = 1; j < numPages + 1; j++) {
                 String FileName = projectNum + "-" + (firstLotNum) + ".pdf"; /* Dynamic file name */
-
                 firstLotNum++;
                 document = new Document(PageSize.LETTER, 0, 0, 0, 0);
                 PdfCopy copy = new PdfCopy(document, new FileOutputStream(path + "\\" + FileName));
