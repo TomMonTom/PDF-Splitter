@@ -66,6 +66,11 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>com.adobe.acrobat</groupId>
+            <artifactId>acrobat</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.artofsolving</groupId>
             <artifactId>jodconverter</artifactId>
             <version>2.2.1</version>
