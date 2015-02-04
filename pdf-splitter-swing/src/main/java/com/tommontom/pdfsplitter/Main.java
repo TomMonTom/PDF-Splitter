@@ -125,7 +125,6 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         // TODO add your handling code here:
         PdfMerge combiner = new PdfMerge();
         File folder = new File(directoryField.getText());
-        FileNameFilter FileFilter = new FileNameFilter();
         File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             combiner.pdfMerge(files);
@@ -166,7 +165,7 @@ public class Main extends javax.swing.JFrame implements ActionListener,
             public void filesDropped(File[] files) {
                 PdfMerge merger = new PdfMerge();
                 merger.pdfMerge(files);
-                progressListing.insert(merger.getdatacounter(), 0);
+                progressListing.append(merger.getdatacounter());
 
             }
 
@@ -183,14 +182,14 @@ public class Main extends javax.swing.JFrame implements ActionListener,
                     if (copyCheck == true && supplierDoc == false) {
                         dropSplit.pdfSplitDropCopy(files);
 
-                        progressListing.insert(dropSplit.getdatacounter(), 0);
+                        progressListing.append(dropSplit.getdatacounter());
                     } else if (copyCheck == false && supplierDoc == false) {
                         dropSplit.pdfSplitDrop(files);
-                        progressListing.insert(dropSplit.getdatacounter(), 0);
+                        progressListing.append(dropSplit.getdatacounter());
                     }
                     if (supplierDoc == true && copyCheck == false) {
                         dropSplit.pdfSplitDropSupplierDoc(files);
-                        progressListing.insert(dropSplit.getdatacounter(), 0);
+                        progressListing.append(dropSplit.getdatacounter());
                     }
                 } catch (IOException | DocumentException | InterruptedException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -208,7 +207,7 @@ public class Main extends javax.swing.JFrame implements ActionListener,
              * found within the main pdf document.
              */
             evenSplit.pdfEven(path);
-            progressListing.insert(evenSplit.getdatacounter(), 0);
+            progressListing.append(evenSplit.getdatacounter());
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
@@ -531,11 +530,11 @@ public class Main extends javax.swing.JFrame implements ActionListener,
         // TODO add your handling code here:
         PdfSplit cancel = new PdfSplit();
         try {
-            for (String deleteFile1 : cancel.cancel()) {
-            if (deleteFile1 != null) {
-                Path path = Paths.get(deleteFile1);
-                Files.delete(path);
-            }
+            for (int i =0; i<cancel.cancel().length;i++) {
+                if (cancel.cancel()[i] != null) {
+                    Path path = Paths.get(cancel.cancel()[i]);
+                    Files.delete(path.resolve(cancel.cancel()[i]));
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -567,23 +566,23 @@ public class Main extends javax.swing.JFrame implements ActionListener,
             if (copyCheck == true && supplierDoc == false) {
                 okSplit.pdfSplitCopy(path);
                 progressBar.setValue(okSplit.barUpdate);
-                progressListing.insert(okSplit.getdatacounter(), 0);
+                progressListing.append(okSplit.getdatacounter());
             } else if (copyCheck == false && supplierDoc == false) {
                 okSplit.pdfSplit(path);
-                progressListing.insert(okSplit.getdatacounter(), 0);
+                progressListing.append(okSplit.getdatacounter());
             }
             if (supplierDoc == true && copyCheck == false) {
                 okSplit.pdfSplitSupplierDoc(path);
                 progressBar.setValue(okSplit.getvalue());
-                progressListing.insert(okSplit.getdatacounter(), 0);
+                progressListing.append(okSplit.getdatacounter());
             } else if (supplierDoc == false && copyCheck == false) {
                 okSplit.pdfSplit(path);
                 progressBar.setValue(okSplit.getvalue());
-                progressListing.insert(okSplit.getdatacounter(), 0);
+                progressListing.append(okSplit.getdatacounter());
             } else {
                 okSplit.pdfSplit(path);
                 progressBar.setValue(okSplit.getvalue());
-                progressListing.insert(okSplit.getdatacounter(), 0);
+                progressListing.append(okSplit.getdatacounter());
             }
 
         } catch (IOException ex) {

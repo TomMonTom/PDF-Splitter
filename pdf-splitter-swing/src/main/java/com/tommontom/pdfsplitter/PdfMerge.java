@@ -102,7 +102,7 @@ public class PdfMerge extends Main {
             //add the file info to a list with the path and filename in place. then output the information to the doMerge method.
             for (File f : listOfFiles) {
                 if (f.getName().toLowerCase().endsWith(".pdf")) {
-                    list.add(new FileInputStream(new File("/" + f)));
+                    list.add(new FileInputStream(new File("\\" + f)));
                 }
 
                 if (f.getName().toLowerCase().endsWith(".jpg")) {
@@ -123,7 +123,7 @@ public class PdfMerge extends Main {
                 }
 
                 if (listOfFiles.length > 0) {
-                    newFileListing += ("Files Merged:" + DEFAULT_PATH + "/" + f + "\n");
+                    newFileListing += ("Files Merged:" + DEFAULT_PATH + "\\" + f + "\n");
                 }
                 barUpdate = (int) (((j / listOfFiles.length) * 100));
                 j++;
@@ -132,8 +132,8 @@ public class PdfMerge extends Main {
                 progressBar.setValue(barUpdate);
 
             }
-            OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "/" + listOfFiles[0].getName() + ".pdf"));
-            newFileListing += ("File Made:" + DEFAULT_PATH + "/" + listOfFiles[0].getName() + ".pdf" + "\n");
+            OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[0].getName() + ".pdf"));
+            newFileListing += ("File Made:" + DEFAULT_PATH + "\\" + listOfFiles[0].getName() + ".pdf" + "\n");
             doMerge(list, listImages, out);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PdfMerge.class.getName()).log(Level.SEVERE, null, ex);
