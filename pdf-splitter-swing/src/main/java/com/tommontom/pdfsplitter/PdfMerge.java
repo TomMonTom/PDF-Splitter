@@ -5,10 +5,6 @@
  */
 package com.tommontom.pdfsplitter;
 
-import com.artofsolving.jodconverter.DocumentConverter;
-import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,17 +26,29 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.SimpleBookmark;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
+import static javax.xml.ws.Endpoint.publish;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class PdfMerge extends Main {
+public class PdfMerge extends SwingWorker <String, File> {
 
-    public String newFileListing;
+    public String newFileListing = "";
     public int barUpdate;
+    int n = 0;
+    int o = 0;
+    int k = 0;
+    int l = 0;
+    JProgressBar progressBar = new PDFSplitter().progressBar;
 
-    public static void doMerge(java.util.List<InputStream> list, String[] imageList, String[] listWordExcels, OutputStream outputStream)
+    public void doMerge(java.util.List<InputStream> list, String[] filesBook, String[] imageList, OutputStream outputStream)
             throws DocumentException, IOException {
         Document document = new Document(PageSize.LETTER, 0, 0, 0, 0);
         PdfWriter writer = PdfWriter.getInstance(document, outputStream);
@@ -48,15 +56,38 @@ public class PdfMerge extends Main {
         document.open();
         PdfContentByte cb = writer.getDirectContent();
         Image img;
-        for (InputStream in : list) {
-            PdfReader reader = new PdfReader(in);
-            for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+        ArrayList<HashMap<String, Object>> bookmarks = new ArrayList<>();
+        List<HashMap<String, Object>> tmp;
+        HashMap<String, Object> newTmp = new HashMap<>();
 
-                document.newPage();
-                //import the page from source pdf
-                PdfImportedPage page = writer.getImportedPage(reader, i);
-                //add the page to the destination pdf
-                cb.addTemplate(page, 0, 0);
+        for (int j = 0; j < list.size(); j++) {
+            PdfReader reader = new PdfReader(list.get(j));
+            reader.consolidateNamedDestinations();
+            tmp = SimpleBookmark.getBookmark(reader);
+            if (SimpleBookmark.getBookmark(reader) == null) {
+                newTmp.put("Title", filesBook[j]);
+                newTmp.put("Action", "GoTo");
+                newTmp.put("Page", String.format("%d Fit", o));
+                bookmarks.add(newTmp);
+                o++;
+                System.out.println(o);
+                System.out.print(j);
+
+            }
+            if (!reader.isEncrypted()) {
+                for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+                    document.newPage();
+                    //import the page from source pdf
+                    PdfImportedPage page = writer.getImportedPage(reader, i);
+                    //add the page to the destination pdf
+                    cb.addTemplate(page, 0, 0);
+                }
+                if (tmp != null) {
+                    bookmarks.addAll(tmp);
+                }
+
+                SimpleBookmark.shiftPageNumbers(tmp, n, null);
+                n += reader.getNumberOfPages();
             }
 
         }
@@ -64,32 +95,19 @@ public class PdfMerge extends Main {
             document.newPage();
             if (imageList[i] != null) {
                 img = Image.getInstance(String.format("%s", imageList[i]));
-                Rectangle one = new Rectangle(img.getPlainWidth(), img.getPlainHeight());
-                document.setPageSize(one);
-                if (img.getScaledWidth() > img.getScaledHeight()) {
-                    img.rotate();
-                }
-                if (img.getScaledWidth() > 792 || img.getScaledHeight() > 792) {
-                    img.scaleToFit(792, 792);
-
-                }
-                img.setDpi(150, 150);
+                Rectangle resize = new Rectangle(PageSize.LETTER);
+                img.scaleToFit(resize);
                 document.add(img);
+                newTmp.put("Title", imageList[i]);
+                newTmp.put("Action", "GoTo");
+                newTmp.put("Page", String.format("%d Fit", n + k));
+                bookmarks.add(newTmp);
+                k++;
             }
+
         }
-        for (int i = 0; i < listWordExcels.length; i++) {
-            if (imageList[i] != null) {
-                File input = new File(listWordExcels[i]);
-                File output = new File(listWordExcels[i]+".pdf");
-                String outputS = listWordExcels[i]+".pdf";
-                OpenOfficeConnection connection = new SocketOpenOfficeConnection(8100);
-                connection.connect();
-                DocumentConverter converter = new OpenOfficeDocumentConverter(connection);
-                converter.convert(input, output);
-                PdfReader readerWord = new PdfReader(outputS);
-                PdfImportedPage page = writer.getImportedPage(readerWord, readerWord.getNumberOfPages());
-                cb.addTemplate(page, 0,0);
-            }
+        if (!bookmarks.isEmpty()) {
+            writer.setOutlines(bookmarks);
         }
 
         outputStream.flush();
@@ -104,19 +122,25 @@ public class PdfMerge extends Main {
         System.out.println(DEFAULT_PATH);
         List<java.io.InputStream> list = new ArrayList<>();
         File[] listOfFiles = files; /* Stores the listing of the files */
+
         String[] listImages = new String[listOfFiles.length];
-        String[] listWordExcels = new String[listOfFiles.length];
+        String[] filesBook = new String[listOfFiles.length];
         Arrays.sort(listOfFiles); // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
         for (int j = 0; j < listOfFiles.length; j++) {
             System.out.println(listOfFiles[j].getName());
         }
         int i = 0;
-        float j = 0;
         try {
             //add the file info to a list with the path and filename in place. then output the information to the doMerge method.
             for (File f : listOfFiles) {
                 if (f.getName().toLowerCase().endsWith(".pdf")) {
-                    list.add(new FileInputStream(new File("\\" + f)));
+                    list.add(new FileInputStream(new File("/" + f)));
+                    PdfReader encrypt = new PdfReader(f.getPath());
+                    if (encrypt.isEncrypted()) {
+                        newFileListing += ("File: " + f.getName() + " is encrypted, please decrypt file before splitting" + "\n");
+                        return;
+
+                    }
                 }
 
                 if (f.getName().toLowerCase().endsWith(".jpg")) {
@@ -135,24 +159,21 @@ public class PdfMerge extends Main {
                     listImages[i] = f.getPath();
 
                 }
-                if (f.getName().toLowerCase().endsWith(".doc")) {
-                    listWordExcels[i] = f.getPath();
+                if (f.getName().toLowerCase().endsWith(".jpeg")) {
+                    listImages[i] = f.getPath();
+
                 }
 
-                if (listOfFiles.length > 0) {
-                    newFileListing += ("Files Merged:" + DEFAULT_PATH + "\\" + f + "\n");
+                if (f.exists()) {
+                    newFileListing += ("Files Merged:" + DEFAULT_PATH + "/" + f + "\n");
                 }
-                barUpdate = (int) (((j / listOfFiles.length) * 100));
-                j++;
                 i++;
-                System.out.println(barUpdate);
-                progressBar.setValue(barUpdate);
-
             }
-            OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "\\" + listOfFiles[0].getName() + ".pdf"));
-            newFileListing += ("File Made:" + DEFAULT_PATH + "\\" + listOfFiles[0].getName() + ".pdf" + "\n");
-            System.out.println(out);
-            doMerge(list, listImages, listWordExcels, out);
+
+            String filenameOutput = listOfFiles[0].getName();
+            OutputStream out = new FileOutputStream(new File(DEFAULT_PATH + "/" + filenameOutput.substring(0, filenameOutput.lastIndexOf('.')) + "(" + "Merged" + ")" + ".pdf"));
+            newFileListing += ("File Made:" + DEFAULT_PATH + "/" + filenameOutput.substring(0, filenameOutput.lastIndexOf('.')) + "(" + "Merged" + ")" + ".pdf" + "\n");
+            doMerge(list, filesBook, listImages, out);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PdfMerge.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException | IOException ex) {
@@ -162,5 +183,31 @@ public class PdfMerge extends Main {
 
     public String getdatacounter() {
         return newFileListing;
+    }
+
+    protected int progress() {
+        int total = (o + k / n) * 100;
+        int progress = 100;
+        while (progress < total) {
+            //Make random progress.
+            setProgress(Math.min(total, 100));
+        }
+        return progress;
+    }
+
+    @Override
+    public void done() {
+        Toolkit.getDefaultToolkit().beep();
+    }
+
+    @Override
+    protected String doInBackground() throws Exception {
+        int total = (o + k / n) * 100;
+        int progress = 100;
+        while (progress < total) {
+            //Make random progress.
+            setProgress(Math.min(total, 100));
+        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
