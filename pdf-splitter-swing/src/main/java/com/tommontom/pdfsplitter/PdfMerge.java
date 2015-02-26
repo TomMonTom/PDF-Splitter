@@ -38,7 +38,7 @@ import javax.swing.SwingWorker;
 import static javax.xml.ws.Endpoint.publish;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class PdfMerge extends SwingWorker <String, File> {
+public class PdfMerge {
 
     public String newFileListing = "";
     public int barUpdate;
@@ -122,7 +122,6 @@ public class PdfMerge extends SwingWorker <String, File> {
         System.out.println(DEFAULT_PATH);
         List<java.io.InputStream> list = new ArrayList<>();
         File[] listOfFiles = files; /* Stores the listing of the files */
-
         String[] listImages = new String[listOfFiles.length];
         String[] filesBook = new String[listOfFiles.length];
         Arrays.sort(listOfFiles); // Sorts the files according to numeral filenames. (eg: Page 1, pg1, etc.)
@@ -183,31 +182,5 @@ public class PdfMerge extends SwingWorker <String, File> {
 
     public String getdatacounter() {
         return newFileListing;
-    }
-
-    protected int progress() {
-        int total = (o + k / n) * 100;
-        int progress = 100;
-        while (progress < total) {
-            //Make random progress.
-            setProgress(Math.min(total, 100));
-        }
-        return progress;
-    }
-
-    @Override
-    public void done() {
-        Toolkit.getDefaultToolkit().beep();
-    }
-
-    @Override
-    protected String doInBackground() throws Exception {
-        int total = (o + k / n) * 100;
-        int progress = 100;
-        while (progress < total) {
-            //Make random progress.
-            setProgress(Math.min(total, 100));
-        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

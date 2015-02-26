@@ -163,6 +163,7 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
             // initializes a drag and drop interface to then use an object           
             public void filesDropped(File[] files) {
                 PdfMerge merge = new PdfMerge();
+                merge.pdfMerge(files);
                 progressListing.append(merge.getdatacounter());
                 progressBar.setIndeterminate(false);
             }
