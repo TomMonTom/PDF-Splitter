@@ -132,30 +132,28 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     private void combineActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_combineActionPerformed
         // TODO add your handling code here:
         File folder = new File(directoryField.getText());
-        List<File> allFiles = new ArrayList<>();
-
         concatDirectoryContents(folder);
     }// GEN-LAST:event_combineActionPerformed
-    public int p = 0;
 
+    public int p = 0;
+    public List<File> fileList = new ArrayList<>();
     public void concatDirectoryContents(File dir) {
-        PdfMerge combiner = new PdfMerge();
         File[] files = dir.listFiles();
-        List<File> fileList = new ArrayList<>();
+        PdfMerge combiner = new PdfMerge();
+
         for (File file : files) {
             if (file.isDirectory()) {
                 concatDirectoryContents(file);
+                p += 1;
             } else {
                 fileList.add(file);
                 p += 1;
                 System.out.print(p);
             }
         }
-        if (p == 7) {
-            File[] fSorted = fileList.toArray(new File[fileList.size()]);
-            combiner.pdfMerge(fSorted);
-        }
-
+        
+        File[] fSorted = fileList.toArray(new File[fileList.size()]);
+        combiner.pdfMerge(fSorted);
     }
 
     public JMenuBar createMenuBar() {
