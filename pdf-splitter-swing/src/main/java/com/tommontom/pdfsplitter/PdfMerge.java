@@ -67,7 +67,7 @@ public class PdfMerge {
             if (SimpleBookmark.getBookmark(reader) == null) {
                 newTmp.put("Title", filesBook[j]);
                 newTmp.put("Action", "GoTo");
-                newTmp.put("Page", String.format("%d Fit", o));
+                newTmp.put("Page", String.format("%d Fit", o++));
                 bookmarks.add(newTmp);
                 o++;
                 System.out.println(o);

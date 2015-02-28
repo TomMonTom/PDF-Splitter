@@ -60,22 +60,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.adobe.acrobat</groupId>
-            <artifactId>acrobat</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.artofsolving</groupId>
-            <artifactId>jodconverter</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-        <dependency>
             <groupId>bouncycastle</groupId>
             <artifactId>bcmail-jdk15</artifactId>
             <version>140</version>

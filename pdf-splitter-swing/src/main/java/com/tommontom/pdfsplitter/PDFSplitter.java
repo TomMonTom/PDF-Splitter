@@ -21,6 +21,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.text.Highlighter;
@@ -74,7 +77,6 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     String example = "C:\\PDFs";
     public Highlighter highlightRed;
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBrowse;
     private javax.swing.JButton cancelButton;
@@ -93,12 +95,16 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     private javax.swing.JButton evenPages;
     private javax.swing.JMenuItem exit;
     public javax.swing.JButton exitButton;
+    private javax.swing.JDialog helpDialog;
     public javax.swing.JLabel instructions;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuBar menuBar;
     public javax.swing.JButton okButton;
+    private javax.swing.JButton okDialog;
     private javax.swing.JMenuItem paste;
     public javax.swing.JProgressBar progressBar;
     private javax.swing.JTextArea progressListing;
@@ -125,14 +131,32 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
 
     private void combineActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_combineActionPerformed
         // TODO add your handling code here:
-        PdfMerge combiner = new PdfMerge();
         File folder = new File(directoryField.getText());
-        File[] files = folder.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            combiner.pdfMerge(files);
+        List<File> allFiles = new ArrayList<>();
+
+        concatDirectoryContents(folder);
+    }// GEN-LAST:event_combineActionPerformed
+    public int p = 0;
+
+    public void concatDirectoryContents(File dir) {
+        PdfMerge combiner = new PdfMerge();
+        File[] files = dir.listFiles();
+        List<File> fileList = new ArrayList<>();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                concatDirectoryContents(file);
+            } else {
+                fileList.add(file);
+                p += 1;
+                System.out.print(p);
+            }
+        }
+        if (p == 7) {
+            File[] fSorted = fileList.toArray(new File[fileList.size()]);
+            combiner.pdfMerge(fSorted);
         }
 
-    }// GEN-LAST:event_combineActionPerformed
+    }
 
     public JMenuBar createMenuBar() {
         // Creates a menu to copy and paste directory information
@@ -235,7 +259,7 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     }// GEN-LAST:event_evenPagesMouseClicked
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitButtonActionPerformed
-        System.exit(0); // button to perform an exit command to close the application.
+        helpDialog.setVisible(true); // button to perform an exit command to close the application.
     }// GEN-LAST:event_exitButtonActionPerformed
 
     /**
@@ -247,6 +271,10 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        helpDialog = new javax.swing.JDialog();
+        okDialog = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();
         directoryLabel = new javax.swing.JLabel();
         okButton = new javax.swing.JButton();
@@ -275,6 +303,50 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
         cut = new javax.swing.JMenuItem();
         exit = new javax.swing.JMenuItem();
 
+        helpDialog.setTitle("Help");
+        helpDialog.setMinimumSize(new java.awt.Dimension(400, 309));
+        helpDialog.setResizable(false);
+
+        okDialog.setText("OK");
+        okDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okDialogActionPerformed(evt);
+            }
+        });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Drag and drop text files into the green window to combine them together. This works with image files\n\nFiles draged into the orange window will split them appart. These will be named and stored in a separate directory. The buttons will do the same commands by searching the entire directory structure and save them into their own directory.\n\nPlease donate to keep this project going at www.pdfsplitterapp.org\n\nHappy Splitting!\n\nCopyright 2014: PDFSplitter by Thomas David Monberg Thompson and Jeffery Jenkins 2014\n\n");
+        jTextArea1.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(jTextArea1);
+        jTextArea1.setEditable(false);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setWrapStyleWord(true);
+
+        javax.swing.GroupLayout helpDialogLayout = new javax.swing.GroupLayout(helpDialog.getContentPane());
+        helpDialog.getContentPane().setLayout(helpDialogLayout);
+        helpDialogLayout.setHorizontalGroup(
+            helpDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(helpDialogLayout.createSequentialGroup()
+                .addGroup(helpDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(helpDialogLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(okDialog))
+                    .addGroup(helpDialogLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        helpDialogLayout.setVerticalGroup(
+            helpDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(helpDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(okDialog)
+                .addContainerGap())
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         directoryLabel.setText("Directory:");
@@ -290,7 +362,7 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
         titleLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         titleLabel.setText("PDF Spliter");
 
-        exitButton.setText("Exit");
+        exitButton.setText("Help");
         exitButton.setToolTipText("Exit's the program");
         exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,11 +430,16 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
                 .addContainerGap(56, Short.MAX_VALUE))
         );
 
-        evenPages.setText("Even Pages");
+        evenPages.setText("Split Even Pages");
         evenPages.setToolTipText("Even pages will split a pdf that has even pages such as a front and back");
         evenPages.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 evenPagesMouseClicked(evt);
+            }
+        });
+        evenPages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                evenPagesActionPerformed(evt);
             }
         });
 
@@ -418,7 +495,9 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
 
         progressListing.setColumns(20);
         progressListing.setRows(5);
+        progressListing.setWrapStyleWord(true);
         jScrollPane2.setViewportView(progressListing);
+        progressListing.setEditable(false);
 
         edit.setText("Edit");
 
@@ -470,7 +549,7 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(dragAndDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
+                        .addComponent(dragAndDropSplit, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -584,13 +663,21 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
 
     private void copiesAmountFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_copiesAmountFocusGained
         // TODO add your handling code here:
-
         copiesAmount.setBackground(Color.white);
     }//GEN-LAST:event_copiesAmountFocusGained
 
     private void dragAndDropPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dragAndDropPropertyChange
         // TODO add your handling code here:
     }//GEN-LAST:event_dragAndDropPropertyChange
+
+    private void okDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okDialogActionPerformed
+        // TODO add your handling code here:
+        helpDialog.setVisible(false);
+    }//GEN-LAST:event_okDialogActionPerformed
+
+    private void evenPagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evenPagesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_evenPagesActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_okButtonActionPerformed
         PdfSplit okSplit = new PdfSplit();
