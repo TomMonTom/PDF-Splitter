@@ -17,6 +17,7 @@ import java.awt.Toolkit;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.nio.file.Path;
 import java.util.List;
+import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 /**
@@ -24,7 +25,7 @@ import javax.swing.SwingWorker;
  * @author tthompson
  */
 public class PdfSplit extends SwingWorker{
-
+    JProgressBar progressBar = new PDFSplitter().progressBar;
     public Path deleteFilesPath;
     public String newFileListing;
     public int barUpdate;
@@ -314,11 +315,29 @@ public class PdfSplit extends SwingWorker{
     public String getdatacounter() {
         return newFileListing;
     }
-
+    protected void progress(){
+        for(int i=0;i<100;i++){
+             progressBar.setValue(i);
+        }
+        
+    
+    }
+    protected void done(){
+     progressBar.setValue(0);
+    }
     @Override
     protected Object doInBackground() throws Exception {
-        j++;
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            Integer result = new Integer(0);
+    for (int i = 0; i < 10; i++) {
+      result += i * 10;
+      try {
+        Thread.sleep(1);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    
+    return result;
     }
 }
 

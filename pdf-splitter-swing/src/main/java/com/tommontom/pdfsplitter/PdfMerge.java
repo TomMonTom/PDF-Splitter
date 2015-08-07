@@ -38,18 +38,19 @@ import javax.swing.SwingWorker;
 import static javax.xml.ws.Endpoint.publish;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class PdfMerge {
+public class PdfMerge extends SwingWorker{
 
     public String newFileListing = "";
     public int barUpdate;
-    int n = 0;
-    int o = 0;
-    int k = 0;
-    int l = 0;
+
     JProgressBar progressBar = new PDFSplitter().progressBar;
 
     public void doMerge(java.util.List<InputStream> list, String[] filesBook, String[] imageList, OutputStream outputStream)
             throws DocumentException, IOException {
+            int n = 0;
+    int o = 0;
+    int k = 0;
+    int l = 0;
         Document document = new Document(PageSize.LETTER, 0, 0, 0, 0);
         PdfWriter writer = PdfWriter.getInstance(document, outputStream);
         writer.setFullCompression();
@@ -182,5 +183,30 @@ public class PdfMerge {
 
     public String getdatacounter() {
         return newFileListing;
+    }
+    protected void progress(){
+        for(int i=0;i<100;i++){
+             progressBar.setValue(i);
+        }
+        
+    
+    }
+    protected void done(){
+     progressBar.setValue(0);
+    }
+    @Override
+    protected Object doInBackground() throws Exception {
+    Integer result = new Integer(0);
+    for (int i = 0; i < 10; i++) {
+      result += i * 10;
+      try {
+        Thread.sleep(1);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    
+    return result;
+               
     }
 }
