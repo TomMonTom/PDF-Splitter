@@ -16,22 +16,30 @@ import com.itextpdf.text.pdf.PdfReader;
 import java.awt.Toolkit;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import java.nio.file.Path;
-import java.util.List;
-import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 /**
  *
  * @author tthompson
  */
-public class PdfSplit extends SwingWorker{
-    JProgressBar progressBar = new PDFSplitter().progressBar;
+public class PdfSplit extends SwingWorker<Integer, Integer> {
+
     public Path deleteFilesPath;
     public String newFileListing;
-    public int barUpdate;
-    PDFSplitter directoryField = new PDFSplitter();
-    String example = new PDFSplitter().example;
     int j = 0;
+    String string;
+    int copyNum;
+    boolean drop;
+    boolean copyCheck;
+    File[] files;
+    public PdfSplit(String string, File[] files,int copyNum, boolean drop, boolean copyCheck) {
+        this.copyNum = copyNum;
+        this.string = string;
+        this.files = files;
+        this.drop = drop;
+        this.copyCheck = copyCheck;
+    }
+
     public void pdfSplit(String path) throws IOException, DocumentException, InterruptedException {
         // TODO Instead of hard code path, pass in as argument
         File folder = new File(path);
@@ -63,6 +71,8 @@ public class PdfSplit extends SwingWorker{
                 for (int j = 1; j < numPages + 1; j++) {
                     String FileName = (fileNameWithoutExt); /* Dynamic file name */
 
+                    int prog = (j / numPages) * 100;
+                    setProgress(prog);
                     document = new Document(PageSize.LETTER, 0, 0, 0, 0);
                     PdfCopy copy = new PdfCopy(document, new FileOutputStream(dir + "/" + FileName + "(" + j + ")" + ".pdf"));
                     document.open();
@@ -81,7 +91,6 @@ public class PdfSplit extends SwingWorker{
 
                 continue;
             }
-            System.out.println("Number of Documents Created:" + numPages);
             pdfFileReader.close();
         }
     }
@@ -117,6 +126,8 @@ public class PdfSplit extends SwingWorker{
                 for (int j = 0; j < copyNum + 1; j++) {
                     String FileName = (fileNameWithoutExt); /* Dynamic file name */
 
+                    int prog = (j / copyNum) * 100;
+                    setProgress(prog);
                     document = new Document(PageSize.LETTER, 0, 0, 0, 0);
                     PdfCopy copy = new PdfCopy(document, new FileOutputStream(dir + "/" + FileName + "(" + j + 1 + ")" + ".pdf"));
                     document.open();
@@ -135,7 +146,6 @@ public class PdfSplit extends SwingWorker{
                 continue;
             }
 
-            System.out.println("Number of Documents Created:" + copyNum);
             pdfFileReader.close();
         }
 
@@ -143,7 +153,6 @@ public class PdfSplit extends SwingWorker{
 
     public void pdfSplitDrop(File[] files, String path) throws IOException, DocumentException, InterruptedException {
         // TODO Instead of hard code path, pass in as argument
-        System.out.println("Path Name: " + path);
         File[] listOfFiles = files; /* Stores the listing of the files */
 
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -170,6 +179,8 @@ public class PdfSplit extends SwingWorker{
                 for (int j = 1; j < numPages + 1; j++) {
                     String FileName = fileNameWithoutExt; /* Dynamic file name */
 
+                    int prog = (j / numPages) * 100;
+                    setProgress(prog);
                     document = new Document(PageSize.LETTER, 0, 0, 0, 0);
                     PdfCopy copy = new PdfCopy(document, new FileOutputStream(dir + "/" + FileName + "(" + j + ")" + ".pdf"));
                     document.open();
@@ -187,7 +198,9 @@ public class PdfSplit extends SwingWorker{
                 continue;
             }
             pdfFileReader.close();
+            
         }
+        drop = false;
     }
 
     public void pdfSplitDropCopy(File[] files, String path, int copyNum) throws IOException, DocumentException {
@@ -216,11 +229,13 @@ public class PdfSplit extends SwingWorker{
             // Example file name: 16034-212234 16034-212236.pdf > 16034-212234.pdf, 16034-212235.pdf, 16034-212236.pdf
             // Create a copy of the orignal source file. We will pick specific pages out below
             if (!pdfFileReader.isEncrypted()) {
-                for ( j = 0; j < copyNum + 1; j++) {
+                for (j = 0; j < copyNum + 1; j++) {
                     File dir = new File(path + "/" + listOfFiles[i].getName());
                     dir.mkdir();
                     String FileName = (fileNameWithoutExt); /* Dynamic file name */
 
+                    int prog = (j / copyNum) * 100;
+                    setProgress(prog);
                     document = new Document(PageSize.LETTER, 0, 0, 0, 0);
                     PdfCopy copy = new PdfCopy(document, new FileOutputStream(dir + "(" + j + 1 + ")" + ".pdf"));
                     document.open();
@@ -283,6 +298,8 @@ public class PdfSplit extends SwingWorker{
                 File dir = new File(listOfFiles[i].getAbsolutePath() + listOfFiles[i].getName());
                 dir.mkdir();
                 while (j < numPages) {
+                    int prog = (j / numPages) * 100;
+                    setProgress(prog);
                     j++;
                     if (j % 2 == 1) {
                         j += 1;
@@ -299,6 +316,7 @@ public class PdfSplit extends SwingWorker{
                     document.open();
                     p += 2;
                     copy.addPage(copy.getImportedPage(pdfFileReader, j)); /* Import pages from original document */
+
                     copy.addPage(copy.getImportedPage(pdfFileReader, p));
                     document.close();
 
@@ -307,37 +325,29 @@ public class PdfSplit extends SwingWorker{
                 newFileListing = ("File:" + fileNameWithoutExt + "is encrypted, please decrypt file before splitting" + "\n");
                 continue;
             }
-            System.out.println("Number of Documents Created:" + numPages);
-            System.out.println("Number of Documents Created:" + listOfFiles[i]);
         }
     }
 
     public String getdatacounter() {
         return newFileListing;
     }
-    protected void progress(){
-        for(int i=0;i<100;i++){
-             progressBar.setValue(i);
+
+    protected void done() {
+    }
+
+    @Override
+    protected Integer doInBackground() throws Exception {
+        if(drop == true && copyCheck==false){
+           pdfSplitDrop(files, string); 
+        }else if (drop==false && copyCheck==false){
+           pdfSplit(string); 
+        }
+        if(copyCheck==true && drop==false){
+            pdfSplitCopy(string, copyNum);
+        }else if(copyCheck==true && drop==true){
+            pdfSplitDropCopy(files,string,copyNum);
         }
         
-    
-    }
-    protected void done(){
-     progressBar.setValue(0);
-    }
-    @Override
-    protected Object doInBackground() throws Exception {
-            Integer result = new Integer(0);
-    for (int i = 0; i < 10; i++) {
-      result += i * 10;
-      try {
-        Thread.sleep(1);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    
-    return result;
+        return null;
     }
 }
-

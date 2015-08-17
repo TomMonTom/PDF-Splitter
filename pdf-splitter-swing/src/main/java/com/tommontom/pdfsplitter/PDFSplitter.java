@@ -16,7 +16,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.text.DefaultEditorKit;
 import com.itextpdf.text.DocumentException;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -24,8 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.SwingWorker;
-import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.text.Highlighter;
 
 /**
@@ -76,6 +74,8 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     public boolean copyCheck;
     String example = "C:\\PDFs";
     public Highlighter highlightRed;
+    public int over = 0;//A number counter to prevent the file from being over written by the merged pdf in case the user clicks on combine once more.
+    public boolean splitDrop;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBrowse;
@@ -107,12 +107,14 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     private javax.swing.JButton okDialog;
     private javax.swing.JMenuItem paste;
     public javax.swing.JProgressBar progressBar;
-    private javax.swing.JTextArea progressListing;
+    public javax.swing.JTextArea progressListing;
     public javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
     /**
      * Creates new form WindowMain
      */
+
+    /* Instantiates tasks to be performed*/
     public PDFSplitter() {
         initComponents();
         /* Stores the listing of the files */
@@ -129,27 +131,53 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
         }
     }// GEN-LAST:event_buttonBrowseMouseClicked
 
+
     private void combineActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_combineActionPerformed
-        // TODO add your handling code here:
-        PdfMerge combiner = new PdfMerge();
+        /*The following takes the text and 
+            
+        
+         */
+        progressListing.setText("");
+        int counterDir = 0;
         File folder = new File(directoryField.getText());
-        concatDirectoryContents(folder);
-        File[] fSorted = fileList.toArray(new File[fileList.size()]);
-        combiner.pdfMerge(fSorted);
+        List<File> fileList = new ArrayList<>();
+        concatDirectoryContents(folder, counterDir, fileList);
+        File[] files = fileList.toArray(new File[fileList.size()]);
+        final PdfMerge combiner = new PdfMerge(files, counterDir, over++);
+        combiner.execute();
+        combiner.addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+
+                        if ("progress".equals(evt.getPropertyName())) {
+                            progressBar.setIndeterminate(true);
+                        }
+                        if (evt.getOldValue().toString().matches("STARTED")) {
+                            progressBar.setIndeterminate(true);
+
+                        }
+                        if (evt.getNewValue().toString().matches("DONE")) {
+                            progressBar.setIndeterminate(false);
+                            progressListing.append(combiner.newFileListing);
+                            progressBar.setValue(100);
+                        }
+
+                    }
+                });
+
+        combiner.isDone();
 
     }// GEN-LAST:event_combineActionPerformed
 
-    public int p = 0;
-    public List<File> fileList = new ArrayList<>();
-
-    public void concatDirectoryContents(File dir) {
+    public void concatDirectoryContents(File dir, int counterDir, List fileList) {
         File[] files = dir.listFiles();
         for (File file : files) {
             if (file.isDirectory()) {
-                concatDirectoryContents(file);
+                counterDir++;
+                concatDirectoryContents(file, counterDir, fileList);
             } else if (file.isFile() && !file.isDirectory()) {
                 fileList.add(file);
-                System.out.print(p);
             }
         }
     }
@@ -178,14 +206,32 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
 
     private void dragAndDropComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropComponentAdded
         // Code used for the drag and drop portion of the combine function
-
+        progressListing.setText("");
         new FileDrop(dragAndDrop, new FileDrop.Listener() {
             // initializes a drag and drop interface to then use an object           
             public void filesDropped(File[] files) {
-                PdfMerge merge = new PdfMerge();
-                merge.pdfMerge(files);
-                progressListing.append(merge.getdatacounter());
-                progressBar.setIndeterminate(false);
+                final PdfMerge merge = new PdfMerge(files, 0, over);
+                merge.execute();
+                merge.addPropertyChangeListener(
+                        new PropertyChangeListener() {
+                            public void propertyChange(PropertyChangeEvent evt) {
+                                if ("progress".equals(evt.getPropertyName())) {
+                                    progressBar.setIndeterminate(true);
+                                }
+                                if (evt.getOldValue().toString().matches("STARTED")) {
+                                    progressBar.setIndeterminate(true);
+
+                                }
+                                if (evt.getNewValue().toString().matches("DONE")) {
+                                    progressBar.setIndeterminate(false);
+                                    progressListing.append(merge.newFileListing);
+                                    progressBar.setValue(100);
+                                }
+
+                            }
+                        });
+                merge.isDone();
+
             }
         });
 
@@ -193,9 +239,10 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
 
     private void dragAndDropSplitComponentAdded(java.awt.event.ContainerEvent evt) {// GEN-FIRST:event_dragAndDropSplitComponentAdded
         // Drag and drop zone to split pdf documents that are dragged and dropped into the JPanel.
+        progressListing.setText("");
         new FileDrop(dragAndDropSplit, new FileDrop.Listener() {
             public void filesDropped(File[] files) {
-                PdfSplit dropSplit = new PdfSplit();
+
                 String path;
                 path = directoryField.getText() + "/";
                 if (directoryField.getText().isEmpty()) {
@@ -203,7 +250,6 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
                 } else {
                     path = directoryField.getText() + "/";
                 }
-                System.out.println(path);
                 String copyNumString = copiesAmount.getText();
                 int copyNum;
                 if (!copiesAmount.getText().isEmpty()) {
@@ -211,26 +257,28 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
                 } else {
                     copyNum = 0;
                 }
-                try {
-                    if (copyCheck == true) {
-                        dropSplit.pdfSplitDropCopy(files, path, copyNum);
-                        progressListing.append(dropSplit.getdatacounter());
-                    } else if (copyCheck == false) {
-                        progressBar.setValue(dropSplit.getProgress());
-                        dropSplit.pdfSplitDrop(files, path);
-                        progressListing.append(dropSplit.getdatacounter());
-                        System.out.println(progressListing.getText());
-                        if (progressListing.getText().contains("encrypted")) {
-                            copyLabel.setText("File is encrypted, please decrypt before modifying");
-                            copyLabel.setForeground(Color.red);
-                        }
-                        if (!progressListing.getText().contains("encrypted")) {
-                            copyLabel.setText("");
-                        }
-                    }
-                } catch (IOException | DocumentException | InterruptedException ex) {
-                    Logger.getLogger(PDFSplitter.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    splitDrop = true;
+                    final PdfSplit dropSplit = new PdfSplit(path, files, copyNum, splitDrop, copyCheck);
+                    dropSplit.execute();
+                    dropSplit.addPropertyChangeListener(
+                            new PropertyChangeListener() {
+                                public void propertyChange(PropertyChangeEvent evt) {
+                                    if ("progress".equals(evt.getPropertyName())) {
+                                        progressBar.setIndeterminate(true);
+                                    }
+                                    if (evt.getOldValue().toString().matches("STARTED")) {
+                                        progressBar.setIndeterminate(true);
+
+                                    }
+                                    if (evt.getNewValue().toString().matches("DONE")) {
+                                        progressBar.setIndeterminate(false);
+                                        progressListing.append(dropSplit.newFileListing);
+                                        progressBar.setValue(100);
+                                    }
+
+                                }
+                            });
+                
 
             }
         });
@@ -238,20 +286,10 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     }// GEN-LAST:event_dragAndDropSplitComponentAdded
 
     private void evenPagesMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_evenPagesMouseClicked
-        PdfSplit evenSplit = new PdfSplit();
         String path = directoryField.getText();
-        try {
-            /*
-             * Execute method pdfEven when the button is clicked. The method takes pages that are even set and makes one pdf documents consisting of two pages
-             * found within the main pdf document.
-             */
-            evenSplit.pdfEven(path);
-            progressListing.append(evenSplit.getdatacounter());
-        } catch (IOException ex) {
-            Logger.getLogger(PDFSplitter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(PDFSplitter.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        PdfSplit evenSplit = new PdfSplit(path, null, 0, splitDrop, copyCheck);
+        evenSplit.execute();
+        progressListing.append(evenSplit.getdatacounter());
     }// GEN-LAST:event_evenPagesMouseClicked
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_exitButtonActionPerformed
@@ -611,8 +649,11 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         // TODO add your handling code here:
+        dispose();
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
+
+    /* Framework for the copy box to make copies of a file through either drag and drop or by directory*/
 
     private void copiesCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copiesCheckActionPerformed
         // TODO add your handling code here:
@@ -636,9 +677,7 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
-        PdfSplit worker = new PdfSplit();
-        worker.cancel(true);
-        //workerMerge.cancel(true);
+
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void directoryFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryFieldMouseClicked
@@ -675,26 +714,38 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
         // TODO add your handling code here:
     }//GEN-LAST:event_evenPagesActionPerformed
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_okButtonActionPerformed
-        PdfSplit okSplit = new PdfSplit();
-        try {
-            String path = directoryField.getText();
-            String copyNumString = copiesAmount.getText();
-            int copyNum = Integer.parseInt(copyNumString);
-            if (copyCheck == true) {
-                okSplit.pdfSplitCopy(path, copyNum);
-                progressListing.append(okSplit.getdatacounter());
-            } else if (copyCheck == false) {
-                okSplit.pdfSplit(path);
-                progressListing.append(okSplit.getdatacounter());
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(PDFSplitter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException | InterruptedException ex) {
-            Logger.getLogger(PDFSplitter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }// GEN-LAST:event_okButtonActionPerformed
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {String path = directoryField.getText();
+    String copyNumString = copiesAmount.getText();
+    int copyNum;
+    if (copyNumString == null) {
+        copyNum = 0;
+    } else {
+        copyNum = Integer.parseInt(copyNumString);
+    }
+    final PdfSplit okSplit = new PdfSplit(path, null, copyNum, splitDrop, copyCheck);
+    okSplit.addPropertyChangeListener(
+            new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if ("progress".equals(evt.getPropertyName())) {
+                        progressBar.setIndeterminate(true);
+                    }
+                    if (evt.getOldValue().toString().matches("STARTED")) {
+                        progressBar.setIndeterminate(true);
+                        
+                    }
+                    if (evt.getNewValue().toString().matches("DONE")) {
+                        progressBar.setIndeterminate(false);
+                        progressListing.append(okSplit.newFileListing);
+                        progressBar.setValue(100);
+                    }
+                    
+                }
+            });
+    okSplit.execute();
+    progressListing.append(okSplit.getdatacounter());
+        okSplit.execute();
+        okSplit.done();
+}
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -705,5 +756,8 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     public void propertyChange(PropertyChangeEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    }// GEN-LAST:event_okButtonActionPerformed
 
-}
+
+
+
