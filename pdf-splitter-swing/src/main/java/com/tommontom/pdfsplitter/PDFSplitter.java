@@ -75,7 +75,7 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
     String example = "C:\\PDFs";
     public Highlighter highlightRed;
     public int over = 0;//A number counter to prevent the file from being over written by the merged pdf in case the user clicks on combine once more.
-    public boolean splitDrop;
+    public boolean splitDrop;//A boolean to 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonBrowse;
@@ -279,7 +279,7 @@ public class PDFSplitter extends javax.swing.JFrame implements ActionListener,
                                 }
                             });
                 
-
+                    dropSplit.isDone();
             }
         });
 

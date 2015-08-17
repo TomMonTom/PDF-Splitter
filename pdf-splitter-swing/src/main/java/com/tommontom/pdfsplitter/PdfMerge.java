@@ -247,7 +247,6 @@ public class PdfMerge extends SwingWorker<Integer, Integer> {
             documentimg.close();
         }
         setProgress(100);
-        Thread.sleep(500);
         setProgress(0);
     }
 
