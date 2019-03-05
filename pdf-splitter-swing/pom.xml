@@ -5,7 +5,7 @@
         <groupId>com.tommontom.pdfsplitter</groupId>
         <artifactId>pdf-splitter</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>750GB/Users/Admin 1/Documents/Projects/TDMT STUDIOS/NetBeansProjects/PDF-Splitter/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>pdf-splitter-swing</artifactId>
